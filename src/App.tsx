@@ -3,8 +3,15 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Search, Moon } from "lucide-react";
+// Path alias test: verify @/ imports work for new types and constants
+import type { Category, Theme, Release, ReleaseEntry } from "@/lib/types";
+import { CATEGORIES, CHANGELOG_URL } from "@/lib/constants";
 
 function App() {
+  // Type verification for Story 1.4: Ensure all imported types are valid
+  const _typeCheck: { release: Release; entry: ReleaseEntry; category: Category; theme: Theme } | null = null;
+  void _typeCheck; // Suppress unused warning
+
   return (
     <div className="min-h-screen bg-background text-foreground p-8">
       <h1 className="text-4xl font-bold mb-2 font-heading">cc-releases</h1>
@@ -113,6 +120,22 @@ function App() {
             <span className="text-sm text-mid-gray">Light Gray</span>
           </div>
         </div>
+      </div>
+
+      {/* Path Alias Verification - Story 1.4 */}
+      <div className="mt-8 border border-mid-gray rounded p-4 bg-background">
+        <h2 className="text-xl font-semibold mb-2 font-heading">
+          ✓ Path Alias Test (Story 1.4)
+        </h2>
+        <p className="text-sm text-mid-gray mb-2">
+          Verified @/ imports working for types and constants:
+        </p>
+        <ul className="text-xs text-mid-gray space-y-1">
+          <li>• Types: {(['Category', 'Theme', 'Release', 'ReleaseEntry'] satisfies string[]).join(', ')}</li>
+          <li>• Constants: CATEGORIES ({(Object.keys(CATEGORIES) as Category[]).join(', ')})</li>
+          <li>• CHANGELOG_URL: {CHANGELOG_URL}</li>
+          <li>• Theme type: {(['light', 'dark'] satisfies Theme[]).join(' | ')}</li>
+        </ul>
       </div>
     </div>
   );
