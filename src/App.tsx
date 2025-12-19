@@ -1,3 +1,9 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Search, Moon } from "lucide-react";
+
 function App() {
   return (
     <div className="min-h-screen bg-background text-foreground p-8">
@@ -6,6 +12,61 @@ function App() {
         Anthropic Claude Code Release History
       </p>
 
+      {/* shadcn/ui Components Test */}
+      <div className="mb-8 border border-mid-gray rounded p-6 bg-background">
+        <h2 className="text-xl font-semibold mb-4 font-heading">
+          shadcn/ui Components
+        </h2>
+
+        {/* Button Component */}
+        <div className="mb-6">
+          <h3 className="text-sm font-semibold mb-3 text-mid-gray">Buttons</h3>
+          <div className="flex gap-3 flex-wrap">
+            <Button>Default Button</Button>
+            <Button variant="outline">Outline Button</Button>
+            <Button variant="ghost" size="sm">
+              <Moon className="mr-2 h-4 w-4" />
+              Theme Toggle
+            </Button>
+          </div>
+        </div>
+
+        {/* Input Component */}
+        <div className="mb-6">
+          <h3 className="text-sm font-semibold mb-3 text-mid-gray">Input</h3>
+          <div className="flex gap-2 w-full max-w-sm">
+            <Input placeholder="Search releases..." />
+            <Button variant="outline" size="sm">
+              <Search className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Badge Component */}
+        <div className="mb-6">
+          <h3 className="text-sm font-semibold mb-3 text-mid-gray">Badges</h3>
+          <div className="flex gap-2 flex-wrap">
+            <Badge>Features</Badge>
+            <Badge variant="outline">Bug Fixes</Badge>
+            <Badge variant="secondary">Performance</Badge>
+            <Badge variant="destructive">DevX</Badge>
+          </div>
+        </div>
+
+        {/* Skeleton Component */}
+        <div>
+          <h3 className="text-sm font-semibold mb-3 text-mid-gray">
+            Skeleton (Loading State)
+          </h3>
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-4 w-1/2" />
+          </div>
+        </div>
+      </div>
+
+      {/* Original Color Palette Display */}
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4 font-heading">
           Category Colors
