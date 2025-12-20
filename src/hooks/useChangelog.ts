@@ -31,9 +31,26 @@ export function useChangelog(): UseChangelogResult {
         const markdown = await response.text();
         const parsedReleases = parseChangelog(markdown);
 
-        setReleases(parsedReleases);
+        // Sort releases in reverse chronological order (newest first)
+        // Parse semantic versions (e.g., "1.0.53" -> [1, 0, 53])
+        const sortedReleases = [...parsedReleases].sort((a, b) => {
+          const parseVersion = (version: string): number[] => {
+            const parts = version.match(/(\d+)\.(\d+)\.(\d+)/);
+            if (!parts) return [0, 0, 0];
+            return [parseInt(parts[1]), parseInt(parts[2]), parseInt(parts[3])];
+          };
+
+          const [aMajor, aMinor, aPatch] = parseVersion(a.version);
+          const [bMajor, bMinor, bPatch] = parseVersion(b.version);
+
+          // Compare major, then minor, then patch (descending order)
+          if (bMajor !== aMajor) return bMajor - aMajor;
+          if (bMinor !== aMinor) return bMinor - aMinor;
+          return bPatch - aPatch;
+        });
+
+        setReleases(sortedReleases);
       } catch (err) {
-        console.error('Error fetching changelog:', err);
         setError(err instanceof Error ? err : new Error('Failed to load releases'));
       } finally {
         setIsLoading(false);
