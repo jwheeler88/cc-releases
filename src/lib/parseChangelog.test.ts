@@ -41,9 +41,11 @@ _Released 2025-01-10_
     expect(parseChangelog('')).toEqual([]);
   });
 
-  it('should handle malformed markdown', () => {
+  it('should handle malformed markdown gracefully', () => {
+    // Malformed but parseable markdown returns empty results
     const markdown = `Some random text without proper headers`;
-    expect(parseChangelog(markdown)).toEqual([]);
+    const result = parseChangelog(markdown);
+    expect(result).toEqual([]);
   });
 
   it('should extract version numbers correctly', () => {
@@ -81,5 +83,48 @@ _Released 2025-01-15_`;
 
     const result = parseChangelog(markdown);
     expect(result[0].entries).toEqual([]);
+  });
+
+  it('should parse real Claude Code CHANGELOG sample', () => {
+    // Real sample matching actual CHANGELOG.md structure
+    const realSample = `## 1.0.53
+_Released 2025-01-15_
+
+- Added new MCP server support
+- Fixed bug in task execution
+- Performance improvements for file search`;
+
+    const result = parseChangelog(realSample);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].version).toBe('1.0.53');
+    expect(result[0].date).toBe('2025-01-15');
+    expect(result[0].entries).toHaveLength(3);
+    expect(result[0].entries[0].content).toBe('Added new MCP server support');
+    expect(result[0].entries[1].content).toBe('Fixed bug in task execution');
+    expect(result[0].entries[2].content).toBe('Performance improvements for file search');
+  });
+
+  it('should handle multiple bullet lists in single release', () => {
+    // Verifies H1 fix - multiple lists should append, not overwrite
+    const markdown = `## 1.0.53
+_Released 2025-01-15_
+
+- Feature A
+- Feature B
+
+Some text here
+
+- Feature C
+- Feature D`;
+
+    const result = parseChangelog(markdown);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].entries).toHaveLength(4);
+    expect(result[0].entries[0].content).toBe('Feature A');
+    expect(result[0].entries[1].content).toBe('Feature B');
+    expect(result[0].entries[2].content).toBe('Feature C');
+    expect(result[0].entries[3].content).toBe('Feature D');
   });
 });

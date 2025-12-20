@@ -1,5 +1,7 @@
 import { marked } from 'marked';
-import type { Release, ReleaseEntry } from '@/lib/types';
+import type { Release, ReleaseEntry, Category } from '@/lib/types';
+
+const DEFAULT_CATEGORY: Category = 'features';
 
 export function parseChangelog(markdown: string): Release[] {
   if (!markdown || markdown.trim() === '') {
@@ -46,11 +48,12 @@ export function parseChangelog(markdown: string): Release[] {
           if (item.text) {
             entries.push({
               content: item.text.trim(),
-              category: 'features', // Default category per story requirements
+              category: DEFAULT_CATEGORY, // Default category per story requirements
             });
           }
         }
-        currentRelease.entries = entries;
+        // Append to existing entries instead of overwriting
+        currentRelease.entries = [...(currentRelease.entries || []), ...entries];
       }
     }
 
@@ -66,6 +69,6 @@ export function parseChangelog(markdown: string): Release[] {
     return releases;
   } catch (error) {
     console.error('Error parsing changelog:', error);
-    return [];
+    throw new Error(`Failed to parse changelog: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
