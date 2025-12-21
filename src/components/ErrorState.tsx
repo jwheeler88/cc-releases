@@ -25,7 +25,7 @@ export function ErrorState({ error, retry }: ErrorStateProps) {
     >
       {/* Error icon */}
       <AlertCircle
-        className="h-12 w-12 text-[#b0aea5] mb-6"
+        className="h-12 w-12 text-mid-gray mb-6"
         aria-hidden="true"
       />
 
@@ -50,33 +50,56 @@ export function ErrorState({ error, retry }: ErrorStateProps) {
 
 /**
  * Detect error type based on error message or properties
+ * Handles edge cases: empty messages, browser-specific formats, TypeError instances
  */
 function detectErrorType(error: Error): ErrorType {
-  const message = error.message.toLowerCase();
+  // Handle empty or missing error messages
+  const message = (error.message || '').toLowerCase();
+
+  // Check error type/name for additional context (e.g., TypeError, NetworkError)
+  const errorName = (error.name || '').toLowerCase();
 
   // Network errors (including HTTP status errors like 404, 500)
   // useChangelog throws: "Failed to fetch: 404 Not Found"
+  // TypeError: Failed to fetch (Chrome/Firefox)
+  // Browser-specific network errors
   if (
     message.includes('network') ||
     message.includes('failed to fetch') ||
+    message.includes('fetch') || // Catch bare "fetch" errors
     message.includes('offline') ||
     message.includes('status') ||
-    message.includes('cors')
+    message.includes('cors') ||
+    message.includes('load failed') || // Safari network error
+    message.includes('networkerror') || // Firefox
+    errorName === 'typeerror' || // TypeError: Failed to fetch
+    errorName === 'networkerror'
   ) {
     return 'network';
   }
 
   // Timeout errors
-  if (message.includes('timeout') || message.includes('aborted')) {
+  if (
+    message.includes('timeout') ||
+    message.includes('aborted') ||
+    message.includes('timed out') ||
+    errorName === 'timeouterror'
+  ) {
     return 'timeout';
   }
 
   // Parse errors
-  if (message.includes('parse') || message.includes('invalid') || message.includes('malformed')) {
+  if (
+    message.includes('parse') ||
+    message.includes('invalid') ||
+    message.includes('malformed') ||
+    message.includes('syntax') ||
+    errorName === 'syntaxerror'
+  ) {
     return 'parse';
   }
 
-  // Unknown/general errors
+  // Unknown/general errors (fallback for empty messages or unrecognized errors)
   return 'unknown';
 }
 

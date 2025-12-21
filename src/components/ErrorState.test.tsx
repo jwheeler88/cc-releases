@@ -78,6 +78,34 @@ describe('ErrorState', () => {
     expect(screen.getByText(/check your internet connection/i)).toBeInTheDocument();
   });
 
+  it('should handle TypeError for network errors', () => {
+    const mockError = new TypeError('Failed to fetch');
+    const mockRetry = vi.fn();
+
+    render(<ErrorState error={mockError} retry={mockRetry} />);
+
+    expect(screen.getByText(/check your internet connection/i)).toBeInTheDocument();
+  });
+
+  it('should handle empty error messages', () => {
+    const mockError = new Error('');
+    const mockRetry = vi.fn();
+
+    render(<ErrorState error={mockError} retry={mockRetry} />);
+
+    // Empty messages should default to 'unknown' type
+    expect(screen.getByText(/Unable to load release notes/i)).toBeInTheDocument();
+  });
+
+  it('should handle Safari-specific network errors', () => {
+    const mockError = new Error('Load failed');
+    const mockRetry = vi.fn();
+
+    render(<ErrorState error={mockError} retry={mockRetry} />);
+
+    expect(screen.getByText(/check your internet connection/i)).toBeInTheDocument();
+  });
+
   it('should render retry button with correct label', () => {
     const mockError = new Error('Test error');
     const mockRetry = vi.fn();
@@ -209,6 +237,13 @@ describe('ErrorState - Integration Pattern', () => {
   it('should demonstrate useChangelog integration pattern', () => {
     // This test documents how Story 2.7 will integrate ErrorState
     // with the useChangelog hook's error and retry properties
+    //
+    // NOTE: This test uses mocks. Full integration testing with actual
+    // useChangelog hook should be performed in Story 2.7 to verify:
+    // 1. Retry callback actually triggers a new fetch
+    // 2. Error state clears when retry succeeds
+    // 3. Loading state shows during retry
+    // 4. Real network error formats are handled correctly
 
     const MockReleaseList = () => {
       // Simulating useChangelog hook return pattern
