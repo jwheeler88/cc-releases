@@ -91,6 +91,21 @@ describe('ReleaseEntry - Markdown Rendering', () => {
     expect(code?.textContent).toBe('inline code');
   });
 
+  it('should apply inline code styling classes', () => {
+    const { container } = render(
+      <ReleaseEntry category="features" content="Text with `code` here" />
+    );
+
+    const entry = container.firstChild as HTMLElement;
+    // Verify Tailwind arbitrary selectors for code styling
+    expect(entry.className).toContain('[&_code]:bg-[#2a2a28]');
+    expect(entry.className).toContain('[&_code]:px-1.5');
+    expect(entry.className).toContain('[&_code]:py-0.5');
+    expect(entry.className).toContain('[&_code]:rounded');
+    expect(entry.className).toContain('[&_code]:text-[15px]');
+    expect(entry.className).toContain('[&_code]:font-mono');
+  });
+
   it('should render links with target="_blank" and rel attributes', () => {
     const { container } = render(
       <ReleaseEntry
@@ -107,6 +122,21 @@ describe('ReleaseEntry - Markdown Rendering', () => {
     expect(link?.textContent).toBe('documentation');
   });
 
+  it('should apply link styling classes', () => {
+    const { container } = render(
+      <ReleaseEntry
+        category="features"
+        content="Check [docs](https://example.com)"
+      />
+    );
+
+    const entry = container.firstChild as HTMLElement;
+    // Verify Tailwind arbitrary selectors for link styling
+    expect(entry.className).toContain('[&_a]:text-[#6a9bcc]');
+    expect(entry.className).toContain('[&_a:hover]:text-[#8bb4d9]');
+    expect(entry.className).toContain('[&_a]:underline');
+  });
+
   it('should render unordered lists correctly', () => {
     const content = 'Features:\n- Item 1\n- Item 2';
     const { container } = render(
@@ -118,6 +148,23 @@ describe('ReleaseEntry - Markdown Rendering', () => {
 
     const items = container.querySelectorAll('li');
     expect(items.length).toBe(2);
+  });
+
+  it('should apply list styling classes', () => {
+    const content = 'Items:\n- One\n- Two';
+    const { container } = render(
+      <ReleaseEntry category="features" content={content} />
+    );
+
+    const entry = container.firstChild as HTMLElement;
+    // Verify Tailwind arbitrary selectors for list styling
+    expect(entry.className).toContain('[&_ul]:list-disc');
+    expect(entry.className).toContain('[&_ul]:ml-6');
+    expect(entry.className).toContain('[&_ul]:my-2');
+    expect(entry.className).toContain('[&_ol]:list-decimal');
+    expect(entry.className).toContain('[&_ol]:ml-6');
+    expect(entry.className).toContain('[&_ol]:my-2');
+    expect(entry.className).toContain('[&_li]:my-1');
   });
 
   it('should render bold and italic text', () => {
@@ -144,18 +191,48 @@ describe('ReleaseEntry - Markdown Rendering', () => {
     expect(entry).toBeInTheDocument();
   });
 
-  it('should render HTML entities safely', () => {
+  it('should sanitize javascript: protocol URLs (XSS protection)', () => {
     const { container } = render(
       <ReleaseEntry
         category="features"
-        content="Safe content with <code>tags</code>"
+        content="Click [here](javascript:alert('xss'))"
       />
     );
 
-    // marked preserves code tags as HTML
-    const code = container.querySelector('code');
-    expect(code).toBeInTheDocument();
-    expect(code?.textContent).toBe('tags');
+    const link = container.querySelector('a');
+    expect(link).toBeInTheDocument();
+    // Should be sanitized to # instead of javascript:
+    expect(link?.getAttribute('href')).toBe('#');
+    expect(link?.getAttribute('href')).not.toContain('javascript:');
+  });
+
+  it('should sanitize data: protocol URLs (XSS protection)', () => {
+    const { container } = render(
+      <ReleaseEntry
+        category="features"
+        content="[malicious](data:text/html,<script>alert('xss')</script>)"
+      />
+    );
+
+    const link = container.querySelector('a');
+    expect(link).toBeInTheDocument();
+    // Should be sanitized to # instead of data:
+    expect(link?.getAttribute('href')).toBe('#');
+    expect(link?.getAttribute('href')).not.toContain('data:');
+  });
+
+  it('should allow safe http and https URLs', () => {
+    const { container } = render(
+      <ReleaseEntry
+        category="features"
+        content="[safe](https://example.com) and [also safe](http://example.com)"
+      />
+    );
+
+    const links = container.querySelectorAll('a');
+    expect(links.length).toBe(2);
+    expect(links[0]?.getAttribute('href')).toBe('https://example.com');
+    expect(links[1]?.getAttribute('href')).toBe('http://example.com');
   });
 
   it('should maintain category border color with markdown content', () => {

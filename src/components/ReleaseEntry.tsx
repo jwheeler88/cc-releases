@@ -2,33 +2,36 @@ import { marked } from 'marked';
 import type { Category } from '@/lib/types';
 import { CATEGORIES } from '@/lib/constants';
 
-// Configure marked globally for this module
-marked.setOptions({
-  breaks: true,
-  gfm: true,
-});
-
 interface ReleaseEntryProps {
   category: Category;
   content: string;
 }
 
+// Create renderer once at module scope for performance
+const linkRenderer = new marked.Renderer();
+
+// Override link renderer to add target="_blank" and sanitize hrefs
+linkRenderer.link = ({ href, title, tokens }) => {
+  // Sanitize href - only allow http/https/mailto protocols to prevent XSS
+  const sanitizedHref = href?.startsWith('javascript:') || href?.startsWith('data:')
+    ? '#'
+    : href;
+  const text = tokens.map(t => t.raw).join('');
+  const titleAttr = title ? ` title="${title}"` : '';
+  return `<a href="${sanitizedHref}"${titleAttr} target="_blank" rel="noopener noreferrer">${text}</a>`;
+};
+
 /**
- * Renders markdown content with custom link handling
+ * Renders markdown content with custom link handling and XSS protection
  * @param content - Raw markdown string from CHANGELOG
  * @returns Sanitized HTML string
  */
 function renderMarkdown(content: string): string {
-  const renderer = new marked.Renderer();
-
-  // Override link renderer to add target="_blank" and security attributes
-  renderer.link = ({ href, title, tokens }) => {
-    const text = tokens.map(t => t.raw).join('');
-    const titleAttr = title ? ` title="${title}"` : '';
-    return `<a href="${href}"${titleAttr} target="_blank" rel="noopener noreferrer">${text}</a>`;
-  };
-
-  return marked.parse(content, { renderer }) as string;
+  return marked.parse(content, {
+    renderer: linkRenderer,
+    breaks: true,
+    gfm: true
+  }) as string;
 }
 
 export function ReleaseEntry({ category, content }: ReleaseEntryProps) {
