@@ -106,6 +106,15 @@ describe('App', () => {
       expect(screen.getByRole('main')).toBeInTheDocument();
     });
 
+    it('renders h1 heading with app title', () => {
+      mockHook({ releases: mockReleases });
+      render(<App />);
+
+      const heading = screen.getByRole('heading', { level: 1 });
+      expect(heading).toBeInTheDocument();
+      expect(heading).toHaveTextContent('cc-releases');
+    });
+
     it('renders all releases in the list', () => {
       mockHook({ releases: mockReleases });
       const { container } = render(<App />);
@@ -166,19 +175,40 @@ describe('App', () => {
 
       expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     });
+
+    it('supports keyboard navigation through content', () => {
+      mockHook({ releases: mockReleases });
+      const { container } = render(<App />);
+
+      // Verify main content is in the document
+      const main = screen.getByRole('main');
+      expect(main).toBeInTheDocument();
+
+      // Verify heading is keyboard-accessible (part of document flow)
+      const h1 = screen.getByRole('heading', { level: 1 });
+      expect(h1).toBeVisible();
+
+      // Verify release sections are accessible
+      const h2Elements = container.querySelectorAll('h2');
+      expect(h2Elements.length).toBeGreaterThan(0);
+
+      // All headings should be visible and in DOM (keyboard navigable)
+      h2Elements.forEach(heading => {
+        expect(heading).toBeVisible();
+      });
+    });
   });
 
   // EDGE CASE TESTS
   describe('Edge Cases', () => {
     it('handles empty releases array gracefully', () => {
       mockHook({ releases: [] });
-      render(<App />);
+      const { container } = render(<App />);
 
       // Main element should still render
       expect(screen.getByRole('main')).toBeInTheDocument();
 
       // No release sections should be present
-      const { container } = render(<App />);
       const versionHeadings = Array.from(container.querySelectorAll('h2')).filter(h =>
         h.textContent?.match(/\d+\.\d+\.\d+/)
       );

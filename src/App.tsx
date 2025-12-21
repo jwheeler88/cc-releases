@@ -23,6 +23,9 @@ function App() {
       <div className="p-8">
         {/* Centered content wrapper with max-width constraint */}
         <div className="max-w-[720px] mx-auto">
+          {/* App title - placeholder for Epic 4 HeroSection */}
+          <h1 className="text-4xl font-bold mb-8 font-heading">cc-releases</h1>
+
           {/* Release list - space-y-0 because ReleaseSection has py-16 internally */}
           <div className="space-y-0">
             {releases.map((release) => (
