@@ -125,7 +125,12 @@ describe('LoadingState', () => {
 
     // Verify the animate-pulse class is present (CSS handles reduced motion)
     expect(skeleton?.className).toContain('animate-pulse');
-    // The actual reduced motion behavior is handled by Tailwind CSS
-    // and cannot be tested via JSDOM without CSS evaluation
+
+    // MANUAL TESTING REQUIRED: The actual reduced motion behavior is handled by Tailwind CSS
+    // and cannot be tested via JSDOM without CSS evaluation. To verify:
+    // 1. Open the app in a browser
+    // 2. Set System Preferences > Accessibility > Display > Reduce motion ON
+    // 3. Verify skeleton loading animation stops (no pulse effect)
+    // 4. This should be verified during Story 2.7 integration
   });
 });

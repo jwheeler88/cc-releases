@@ -11,7 +11,8 @@ describe('LoadingState - Integration Pattern', () => {
     const MockReleaseList = () => {
       // Simulating useChangelog hook return pattern
       const [isLoading] = useState(true);
-      const [releases] = useState<unknown[]>([]);
+      // Note: In real implementation, this will be Release[] from lib/types.ts
+      const [releases] = useState<Array<{ version: string; date: string }>>([]);
 
       if (isLoading) {
         return <LoadingState />;
