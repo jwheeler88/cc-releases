@@ -97,16 +97,88 @@ describe('categorizeEntry', () => {
     });
 
     it('should return first matching category when multiple keywords present', () => {
-      // "add" (features) comes before "fix" (bugfixes) in iteration order
-      expect(categorizeEntry('Add feature and fix bug')).toBe('features');
+      // "fix" (bugfixes) comes before "add" (features) in iteration order
+      expect(categorizeEntry('Add feature and fix bug')).toBe('bugfixes');
+    });
+  });
+
+  describe('false positive prevention', () => {
+    it('should not match "fix" in words like "prefix" or "suffix"', () => {
+      expect(categorizeEntry('prefix should not match')).toBe('features');
+      expect(categorizeEntry('suffix should not match')).toBe('features');
+      expect(categorizeEntry('unfixable should not match')).toBe('features');
+    });
+
+    it('should not match "perf" in words like "perfectly"', () => {
+      expect(categorizeEntry('perfectly fine code')).toBe('features');
+    });
+
+    it('should not match "add" in words like "readd"', () => {
+      expect(categorizeEntry('readd the configuration')).toBe('features');
+    });
+
+    it('should not match "new" in words like "newfangled"', () => {
+      expect(categorizeEntry('newfangled idea')).toBe('features');
+    });
+
+    it('should match actual keywords as whole words', () => {
+      expect(categorizeEntry('Fix the bug')).toBe('bugfixes');
+      expect(categorizeEntry('Add new feature')).toBe('features');
+      expect(categorizeEntry('Optimize performance')).toBe('performance');
+    });
+  });
+
+  describe('improvement and optimization keywords', () => {
+    it('should categorize "improve" keyword as devx', () => {
+      expect(categorizeEntry('Improve developer experience')).toBe('devx');
+    });
+
+    it('should categorize "improved" keyword as devx', () => {
+      expect(categorizeEntry('Improved tooling support')).toBe('devx');
+    });
+
+    it('should categorize "reduce" keyword as performance', () => {
+      expect(categorizeEntry('Reduce bundle size')).toBe('performance');
+    });
+
+    it('should categorize "reduced" keyword as performance', () => {
+      expect(categorizeEntry('Reduced terminal flickering')).toBe('performance');
+    });
+  });
+
+  describe('real changelog patterns', () => {
+    it('should correctly categorize real feature entries', () => {
+      expect(categorizeEntry('Added LSP tool for code intelligence')).toBe('features');
+      expect(categorizeEntry('Added /config toggle to enable/disable prompt suggestions')).toBe('features');
+    });
+
+    it('should correctly categorize real bugfix entries', () => {
+      expect(categorizeEntry('Fixed skill allowed-tools not being applied')).toBe('bugfixes');
+      expect(categorizeEntry('Fixed IME support for languages')).toBe('bugfixes');
+    });
+
+    it('should correctly categorize real performance entries', () => {
+      expect(categorizeEntry('Reduced terminal flickering')).toBe('performance');
+    });
+
+    it('should correctly categorize real devx entries', () => {
+      expect(categorizeEntry('Improved memory usage by 3x for large conversations')).toBe('devx');
+      expect(categorizeEntry('Improved /context command visualization')).toBe('devx');
+    });
+
+    it('should handle entries with multiple potential keywords', () => {
+      // "fix" (bugfixes) is checked before "add" (features) in CATEGORIES order
+      expect(categorizeEntry('Add feature and fix bug')).toBe('bugfixes');
+      // "Fixed" (bugfixes) is found before "support" (features)
+      expect(categorizeEntry('Fixed support for new API')).toBe('bugfixes');
     });
   });
 
   describe('CATEGORIES constant verification', () => {
     it('should use CATEGORIES constant with correct structure', () => {
-      // Verify CATEGORIES has expected keys in correct order
+      // Verify CATEGORIES has expected keys in correct order (bugfixes first for priority)
       const categoryKeys = Object.keys(CATEGORIES);
-      expect(categoryKeys).toEqual(['features', 'bugfixes', 'performance', 'devx']);
+      expect(categoryKeys).toEqual(['bugfixes', 'performance', 'devx', 'features']);
     });
 
     it('should have keywords array for each category', () => {
@@ -115,6 +187,18 @@ describe('categorizeEntry', () => {
         expect(Array.isArray(config.keywords)).toBe(true);
         expect(config.keywords.length).toBeGreaterThan(0);
       });
+    });
+
+    it('should have performance keywords including reduce verbs', () => {
+      const perfKeywords = CATEGORIES.performance.keywords;
+      expect(perfKeywords).toContain('reduce');
+      expect(perfKeywords).toContain('reduced');
+    });
+
+    it('should have devx keywords including improvement verbs', () => {
+      const devxKeywords = CATEGORIES.devx.keywords;
+      expect(devxKeywords).toContain('improve');
+      expect(devxKeywords).toContain('improved');
     });
   });
 });

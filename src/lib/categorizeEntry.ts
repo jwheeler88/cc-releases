@@ -14,12 +14,15 @@ import { CATEGORIES } from '@/lib/constants';
  * categorizeEntry('Improve developer tooling') // Returns 'devx'
  */
 export function categorizeEntry(content: string): Category {
-  const lowerContent = content.toLowerCase();
-
-  // Iterate through categories and check keywords
+  // Iterate through categories and check keywords with word boundary matching
   for (const [categoryKey, categoryConfig] of Object.entries(CATEGORIES)) {
     for (const keyword of categoryConfig.keywords) {
-      if (lowerContent.includes(keyword)) {
+      // Some keywords need complete word matching to avoid false positives
+      const completeWordOnly = ['perf', 'dx', 'cli'];
+      const useCompleteWord = completeWordOnly.includes(keyword);
+      const pattern = useCompleteWord ? `\\b${keyword}\\b` : `\\b${keyword}`;
+      const wordBoundaryRegex = new RegExp(pattern, 'i');
+      if (wordBoundaryRegex.test(content)) {
         return categoryKey as Category;
       }
     }
