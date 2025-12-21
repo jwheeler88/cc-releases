@@ -1,0 +1,101 @@
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { ReleaseSection } from './ReleaseSection';
+
+describe('ReleaseSection', () => {
+  it('should render version and date', () => {
+    render(
+      <ReleaseSection version="1.0.53" date="2025-01-15">
+        <div>Test content</div>
+      </ReleaseSection>
+    );
+
+    expect(screen.getByText('1.0.53')).toBeInTheDocument();
+    expect(screen.getByText('2025-01-15')).toBeInTheDocument();
+  });
+
+  it('should render children content', () => {
+    render(
+      <ReleaseSection version="1.0.53" date="2025-01-15">
+        <div>Release entries</div>
+      </ReleaseSection>
+    );
+
+    expect(screen.getByText('Release entries')).toBeInTheDocument();
+  });
+
+  it('should use semantic HTML elements', () => {
+    const { container } = render(
+      <ReleaseSection version="1.0.53" date="2025-01-15">
+        <div>Content</div>
+      </ReleaseSection>
+    );
+
+    const article = container.querySelector('article');
+    expect(article).toBeInTheDocument();
+
+    const time = container.querySelector('time');
+    expect(time).toBeInTheDocument();
+    expect(time).toHaveAttribute('dateTime', '2025-01-15');
+  });
+
+  it('should have complete sticky sidebar positioning classes', () => {
+    const { container } = render(
+      <ReleaseSection version="1.0.53" date="2025-01-15">
+        <div>Content</div>
+      </ReleaseSection>
+    );
+
+    const sidebar = container.querySelector('.md\\:sticky');
+    expect(sidebar).toBeInTheDocument();
+    expect(sidebar?.className).toContain('top-8');
+    expect(sidebar?.className).toContain('h-fit');
+    expect(sidebar?.className).toContain('w-48');
+    expect(sidebar?.className).toContain('shrink-0');
+  });
+
+  it('should have responsive layout classes', () => {
+    const { container } = render(
+      <ReleaseSection version="1.0.53" date="2025-01-15">
+        <div>Content</div>
+      </ReleaseSection>
+    );
+
+    const article = container.querySelector('article');
+    expect(article?.className).toContain('flex-col');
+    expect(article?.className).toContain('md:flex-row');
+    expect(article?.className).toContain('gap-4');
+    expect(article?.className).toContain('md:gap-16');
+  });
+
+  it('should have correct typography classes', () => {
+    const { container } = render(
+      <ReleaseSection version="1.0.53" date="2025-01-15">
+        <div>Content</div>
+      </ReleaseSection>
+    );
+
+    const version = container.querySelector('h2');
+    expect(version?.className).toContain('text-[28px]');
+    expect(version?.className).toContain('md:text-[36px]');
+    expect(version?.className).toContain('font-[Poppins]');
+    expect(version?.className).toContain('text-[#faf9f5]');
+
+    const time = container.querySelector('time');
+    expect(time?.className).toContain('text-sm');
+    expect(time?.className).toContain('font-[Lora]');
+    expect(time?.className).toContain('text-[#b0aea5]');
+  });
+
+  it('should convert non-ISO dates to ISO format for dateTime attribute', () => {
+    const { container } = render(
+      <ReleaseSection version="1.0.53" date="January 15, 2025">
+        <div>Content</div>
+      </ReleaseSection>
+    );
+
+    const time = container.querySelector('time');
+    expect(time).toHaveAttribute('dateTime', '2025-01-15');
+    expect(time?.textContent).toBe('January 15, 2025'); // Display unchanged
+  });
+});
