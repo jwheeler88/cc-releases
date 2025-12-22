@@ -23,17 +23,17 @@ const mockReleases: Release[] = [
 
 describe('useSearch', () => {
   describe('empty query behavior', () => {
-    it('returns all releases when query is empty', () => {
+    it('should return all releases when query is empty', () => {
       const { result } = renderHook(() =>
         useSearch({ releases: mockReleases, query: '' })
       );
 
       expect(result.current.filteredReleases).toEqual(mockReleases);
-      expect(result.current.matchCount).toBe(4); // All 4 entries
-      expect(result.current.releaseCount).toBe(2);
+      expect(result.current.matchCount).toBe(0); // No search = no matches
+      expect(result.current.releaseCount).toBe(0);
     });
 
-    it('returns all releases when query is only whitespace', () => {
+    it('should return all releases when query is only whitespace', () => {
       const { result } = renderHook(() =>
         useSearch({ releases: mockReleases, query: '   ' })
       );
@@ -43,7 +43,7 @@ describe('useSearch', () => {
   });
 
   describe('case-insensitive filtering', () => {
-    it('matches lowercase query against mixed case content', () => {
+    it('should match lowercase query against mixed case content', () => {
       const { result } = renderHook(() =>
         useSearch({ releases: mockReleases, query: 'search' })
       );
@@ -53,7 +53,7 @@ describe('useSearch', () => {
       expect(result.current.filteredReleases[0].version).toBe('1.0.0');
     });
 
-    it('matches uppercase query against mixed case content', () => {
+    it('should match uppercase query against mixed case content', () => {
       const { result } = renderHook(() =>
         useSearch({ releases: mockReleases, query: 'SEARCH' })
       );
@@ -61,7 +61,7 @@ describe('useSearch', () => {
       expect(result.current.matchCount).toBe(1);
     });
 
-    it('matches mixed case query', () => {
+    it('should match mixed case query', () => {
       const { result } = renderHook(() =>
         useSearch({ releases: mockReleases, query: 'SeArCh' })
       );
@@ -71,7 +71,7 @@ describe('useSearch', () => {
   });
 
   describe('entry content filtering', () => {
-    it('includes only matching entries in filtered releases', () => {
+    it('should include only matching entries in filtered releases', () => {
       const { result } = renderHook(() =>
         useSearch({ releases: mockReleases, query: 'bug' })
       );
@@ -84,7 +84,7 @@ describe('useSearch', () => {
       );
     });
 
-    it('excludes releases with no matching entries', () => {
+    it('should exclude releases with no matching entries', () => {
       const { result } = renderHook(() =>
         useSearch({ releases: mockReleases, query: 'nonexistent' })
       );
@@ -94,7 +94,7 @@ describe('useSearch', () => {
       expect(result.current.releaseCount).toBe(0);
     });
 
-    it('searches across all entry content in all releases', () => {
+    it('should search across all entry content in all releases', () => {
       const { result } = renderHook(() =>
         useSearch({ releases: mockReleases, query: 'e' }) // Common letter
       );
@@ -106,7 +106,7 @@ describe('useSearch', () => {
   });
 
   describe('match statistics', () => {
-    it('counts total matching entries correctly', () => {
+    it('should count total matching entries correctly', () => {
       // Query that matches 2 entries
       const { result } = renderHook(() =>
         useSearch({ releases: mockReleases, query: 'e' })
@@ -116,7 +116,7 @@ describe('useSearch', () => {
       expect(result.current.matchCount).toBeGreaterThan(0);
     });
 
-    it('counts releases with matches correctly', () => {
+    it('should count releases with matches correctly', () => {
       const { result } = renderHook(() =>
         useSearch({ releases: mockReleases, query: 'performance' })
       );
@@ -125,7 +125,7 @@ describe('useSearch', () => {
       expect(result.current.matchCount).toBe(1);
     });
 
-    it('returns zero counts for no matches', () => {
+    it('should return zero counts for no matches', () => {
       const { result } = renderHook(() =>
         useSearch({ releases: mockReleases, query: 'xyz123' })
       );
@@ -136,7 +136,7 @@ describe('useSearch', () => {
   });
 
   describe('special characters and edge cases', () => {
-    it('handles special regex characters safely', () => {
+    it('should handle special regex characters safely', () => {
       const { result } = renderHook(() =>
         useSearch({ releases: mockReleases, query: '.' })
       );
@@ -145,7 +145,7 @@ describe('useSearch', () => {
       expect(result.current).toBeDefined();
     });
 
-    it('handles empty releases array', () => {
+    it('should handle empty releases array', () => {
       const { result } = renderHook(() =>
         useSearch({ releases: [], query: 'search' })
       );
@@ -157,7 +157,7 @@ describe('useSearch', () => {
   });
 
   describe('memoization behavior', () => {
-    it('returns same result for same inputs', () => {
+    it('should return same result for same inputs', () => {
       const { result, rerender } = renderHook(
         (props) => useSearch(props),
         { initialProps: { releases: mockReleases, query: 'search' } }
@@ -170,7 +170,7 @@ describe('useSearch', () => {
       expect(firstResult).toBe(secondResult); // Same reference
     });
 
-    it('recomputes when query changes', () => {
+    it('should recompute when query changes', () => {
       const { result, rerender } = renderHook(
         (props) => useSearch(props),
         { initialProps: { releases: mockReleases, query: 'search' } }

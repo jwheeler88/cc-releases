@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import type { Release } from '@/lib/types';
 
-interface UseSearchParams {
+export interface UseSearchParams {
   releases: Release[];
   query: string;
 }
 
-interface UseSearchResult {
+export interface UseSearchResult {
   filteredReleases: Release[];
   matchCount: number;
   releaseCount: number;
@@ -14,13 +14,12 @@ interface UseSearchResult {
 
 export function useSearch({ releases, query }: UseSearchParams): UseSearchResult {
   return useMemo(() => {
-    // Empty query = return all releases with zero match stats
+    // Empty query = return all releases unfiltered with zero match stats
     if (!query.trim()) {
-      const totalEntries = releases.reduce((sum, r) => sum + r.entries.length, 0);
       return {
         filteredReleases: releases,
-        matchCount: totalEntries,
-        releaseCount: releases.length,
+        matchCount: 0,
+        releaseCount: 0,
       };
     }
 
@@ -32,7 +31,7 @@ export function useSearch({ releases, query }: UseSearchParams): UseSearchResult
     for (const release of releases) {
       // Find matching entries within this release
       const matchingEntries = release.entries.filter((entry) =>
-        entry.content.toLowerCase().includes(lowerQuery)
+        entry.content?.toLowerCase().includes(lowerQuery) ?? false
       );
 
       // Only include release if it has matching entries
