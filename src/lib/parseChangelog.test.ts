@@ -127,4 +127,46 @@ Some text here
     expect(result[0].entries[2].content).toBe('Feature C');
     expect(result[0].entries[3].content).toBe('Feature D');
   });
+
+  describe('entry categorization', () => {
+    it('should categorize entries with "fix" keyword as bugfixes', () => {
+      const markdown = `## 1.0.0
+
+_Released 2024-01-01_
+
+- Fix parsing bug`;
+      const result = parseChangelog(markdown);
+      expect(result[0].entries[0].category).toBe('bugfixes');
+    });
+
+    it('should categorize entries with "add" keyword as features', () => {
+      const markdown = `## 1.0.0
+
+_Released 2024-01-01_
+
+- Add new search feature`;
+      const result = parseChangelog(markdown);
+      expect(result[0].entries[0].category).toBe('features');
+    });
+
+    it('should categorize entries with "optimize" keyword as performance', () => {
+      const markdown = `## 1.0.0
+
+_Released 2024-01-01_
+
+- Optimize rendering speed`;
+      const result = parseChangelog(markdown);
+      expect(result[0].entries[0].category).toBe('performance');
+    });
+
+    it('should categorize entries with "improve developer" as devx', () => {
+      const markdown = `## 1.0.0
+
+_Released 2024-01-01_
+
+- Improve developer experience`;
+      const result = parseChangelog(markdown);
+      expect(result[0].entries[0].category).toBe('devx');
+    });
+  });
 });

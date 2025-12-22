@@ -2,7 +2,6 @@ import { useChangelog } from '@/hooks/useChangelog';
 import { LoadingState } from '@/components/LoadingState';
 import { ErrorState } from '@/components/ErrorState';
 import { ReleaseSection } from '@/components/ReleaseSection';
-import { ReleaseEntry } from '@/components/ReleaseEntry';
 
 function App() {
   const { releases, isLoading, error, retry } = useChangelog();
@@ -33,15 +32,8 @@ function App() {
                 key={release.version}
                 version={release.version}
                 date={release.date}
-              >
-                {release.entries.map((entry, index) => (
-                  <ReleaseEntry
-                    key={`${release.version}-${entry.category}-${index}`}
-                    category={entry.category}
-                    content={entry.content}
-                  />
-                ))}
-              </ReleaseSection>
+                entries={release.entries}
+              />
             ))}
           </div>
         </div>

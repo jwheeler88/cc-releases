@@ -1,13 +1,16 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { ReleaseSection } from './ReleaseSection';
+import type { ReleaseEntry as ReleaseEntryType } from '@/lib/types';
 
 describe('ReleaseSection', () => {
+  const mockEntries: ReleaseEntryType[] = [
+    { content: 'Test content', category: 'features' },
+  ];
+
   it('should render version and date', () => {
     render(
-      <ReleaseSection version="1.0.53" date="2025-01-15">
-        <div>Test content</div>
-      </ReleaseSection>
+      <ReleaseSection version="1.0.53" date="2025-01-15" entries={mockEntries} />
     );
 
     expect(screen.getByText('1.0.53')).toBeInTheDocument();
@@ -16,7 +19,7 @@ describe('ReleaseSection', () => {
 
   it('should render children content', () => {
     render(
-      <ReleaseSection version="1.0.53" date="2025-01-15">
+      <ReleaseSection version="1.0.53" date="2025-01-15" entries={[]}>
         <div>Release entries</div>
       </ReleaseSection>
     );
@@ -26,9 +29,7 @@ describe('ReleaseSection', () => {
 
   it('should use semantic HTML elements', () => {
     const { container } = render(
-      <ReleaseSection version="1.0.53" date="2025-01-15">
-        <div>Content</div>
-      </ReleaseSection>
+      <ReleaseSection version="1.0.53" date="2025-01-15" entries={mockEntries} />
     );
 
     const article = container.querySelector('article');
@@ -41,9 +42,7 @@ describe('ReleaseSection', () => {
 
   it('should have complete sticky sidebar positioning classes', () => {
     const { container } = render(
-      <ReleaseSection version="1.0.53" date="2025-01-15">
-        <div>Content</div>
-      </ReleaseSection>
+      <ReleaseSection version="1.0.53" date="2025-01-15" entries={mockEntries} />
     );
 
     const sidebar = container.querySelector('.md\\:sticky');
@@ -56,9 +55,7 @@ describe('ReleaseSection', () => {
 
   it('should have responsive layout classes', () => {
     const { container } = render(
-      <ReleaseSection version="1.0.53" date="2025-01-15">
-        <div>Content</div>
-      </ReleaseSection>
+      <ReleaseSection version="1.0.53" date="2025-01-15" entries={mockEntries} />
     );
 
     const article = container.querySelector('article');
@@ -70,9 +67,7 @@ describe('ReleaseSection', () => {
 
   it('should have correct typography classes', () => {
     const { container } = render(
-      <ReleaseSection version="1.0.53" date="2025-01-15">
-        <div>Content</div>
-      </ReleaseSection>
+      <ReleaseSection version="1.0.53" date="2025-01-15" entries={mockEntries} />
     );
 
     const version = container.querySelector('h2');
@@ -89,13 +84,52 @@ describe('ReleaseSection', () => {
 
   it('should convert non-ISO dates to ISO format for dateTime attribute', () => {
     const { container } = render(
-      <ReleaseSection version="1.0.53" date="January 15, 2025">
-        <div>Content</div>
-      </ReleaseSection>
+      <ReleaseSection version="1.0.53" date="January 15, 2025" entries={mockEntries} />
     );
 
     const time = container.querySelector('time');
     expect(time).toHaveAttribute('dateTime', '2025-01-15');
     expect(time?.textContent).toBe('January 15, 2025'); // Display unchanged
+  });
+});
+
+describe('ReleaseSection - Category Grouping', () => {
+  const mockEntries: ReleaseEntryType[] = [
+    { content: 'Add new feature', category: 'features' },
+    { content: 'Fix critical bug', category: 'bugfixes' },
+    { content: 'Another feature', category: 'features' },
+    { content: 'Optimize performance', category: 'performance' },
+  ];
+
+  it('should group entries by category', () => {
+    render(<ReleaseSection version="1.0.0" date="2024-01-01" entries={mockEntries} />);
+
+    // Should render CategoryGroup headers (checking via role)
+    const headers = screen.getAllByRole('heading', { level: 3 });
+    const headerTexts = headers.map(h => h.textContent);
+    expect(headerTexts).toContain('Features');
+    expect(headerTexts).toContain('Bug Fixes');
+    expect(headerTexts).toContain('Performance');
+  });
+
+  it('should not render empty categories', () => {
+    const entriesNoDevx: ReleaseEntryType[] = [
+      { content: 'Add feature', category: 'features' },
+    ];
+    render(<ReleaseSection version="1.0.0" date="2024-01-01" entries={entriesNoDevx} />);
+
+    const headers = screen.getAllByRole('heading', { level: 3 });
+    const headerTexts = headers.map(h => h.textContent);
+    expect(headerTexts).toContain('Features');
+    expect(headerTexts).not.toContain('DevX');
+  });
+
+  it('should render categories in display order', () => {
+    render(<ReleaseSection version="1.0.0" date="2024-01-01" entries={mockEntries} />);
+
+    const headers = screen.getAllByRole('heading', { level: 3 });
+    expect(headers[0]).toHaveTextContent('Features');
+    expect(headers[1]).toHaveTextContent('Bug Fixes');
+    expect(headers[2]).toHaveTextContent('Performance');
   });
 });

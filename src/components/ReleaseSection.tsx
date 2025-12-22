@@ -1,10 +1,18 @@
 import type { ReactNode } from 'react';
+import type { ReleaseEntry as ReleaseEntryType, Category } from '@/lib/types';
+import { CategoryGroup } from './CategoryGroup';
+import { ReleaseEntry } from './ReleaseEntry';
+
+// Display order for UI (user-friendly order, NOT matching CATEGORIES priority)
+const DISPLAY_ORDER: Category[] = ['features', 'bugfixes', 'performance', 'devx'];
 
 interface ReleaseSectionProps {
   version: string;
   /** Release date in ISO 8601 format (YYYY-MM-DD) for HTML5 compliance */
   date: string;
-  children: ReactNode;
+  entries: ReleaseEntryType[];
+  /** @deprecated Legacy children prop - use entries instead */
+  children?: ReactNode;
 }
 
 /**
@@ -27,8 +35,14 @@ function toISODate(dateString: string): string {
   return dateString;
 }
 
-export function ReleaseSection({ version, date, children }: ReleaseSectionProps) {
+export function ReleaseSection({ version, date, entries, children }: ReleaseSectionProps) {
   const isoDate = toISODate(date);
+
+  // Group entries by category
+  const groupedEntries = DISPLAY_ORDER.reduce((acc, category) => {
+    acc[category] = entries.filter(e => e.category === category);
+    return acc;
+  }, {} as Record<Category, ReleaseEntryType[]>);
 
   return (
     <article className="relative flex flex-col md:flex-row gap-4 md:gap-16 py-16">
@@ -45,9 +59,19 @@ export function ReleaseSection({ version, date, children }: ReleaseSectionProps)
         </time>
       </div>
 
-      {/* Release content area */}
+      {/* Release content grouped by category */}
       <div className="flex-1 max-w-prose">
-        {children}
+        {children ?? DISPLAY_ORDER.map(category => (
+          <CategoryGroup key={category} category={category}>
+            {groupedEntries[category].map((entry, idx) => (
+              <ReleaseEntry
+                key={`${category}-${idx}`}
+                category={entry.category}
+                content={entry.content}
+              />
+            ))}
+          </CategoryGroup>
+        ))}
       </div>
     </article>
   );

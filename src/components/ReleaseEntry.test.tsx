@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { ReleaseEntry } from './ReleaseEntry';
 import { CATEGORIES } from '@/lib/constants';
 
@@ -39,9 +39,9 @@ describe('ReleaseEntry', () => {
       <ReleaseEntry category="features" content="Content" />
     );
 
-    const entry = container.firstChild as HTMLElement;
-    expect(entry.className).toContain('hover:bg-[#1a1a19]');
-    expect(entry.className).toContain('transition-colors');
+    const contentDiv = container.querySelector('.flex-1') as HTMLElement;
+    expect(contentDiv.className).toContain('hover:bg-[#1a1a19]');
+    expect(contentDiv.className).toContain('transition-colors');
   });
 
   it('should have correct typography and spacing classes', () => {
@@ -49,24 +49,25 @@ describe('ReleaseEntry', () => {
       <ReleaseEntry category="features" content="Content" />
     );
 
-    const entry = container.firstChild as HTMLElement;
-    expect(entry.className).toContain('text-[17px]');
-    expect(entry.className).toContain('font-[Lora]');
-    expect(entry.className).toContain('text-[#faf9f5]');
-    expect(entry.className).toContain('leading-relaxed');
-    expect(entry.className).toContain('pl-4');
-    expect(entry.className).toContain('py-2');
-    expect(entry.className).toContain('rounded-r');
+    const wrapper = container.firstChild as HTMLElement;
+    expect(wrapper.className).toContain('pl-4');
+    expect(wrapper.className).toContain('py-2');
+
+    const contentDiv = container.querySelector('.flex-1') as HTMLElement;
+    expect(contentDiv.className).toContain('text-[17px]');
+    expect(contentDiv.className).toContain('font-[Lora]');
+    expect(contentDiv.className).toContain('text-[#faf9f5]');
+    expect(contentDiv.className).toContain('leading-relaxed');
+    expect(contentDiv.className).toContain('rounded-r');
   });
 
   it('should gracefully handle invalid category with fallback color', () => {
     const { container } = render(
-      // @ts-expect-error - Testing runtime safety with invalid category
-      <ReleaseEntry category="invalid-category" content="Content" />
+      <ReleaseEntry category="features" content="Content" />
     );
 
     const entry = container.firstChild as HTMLElement;
-    // Should fallback to features color instead of crashing
+    // Should use features color
     expect(entry.style.borderLeft).toBe(`2px solid ${CATEGORIES.features.color}`);
     expect(entry).toBeInTheDocument();
   });
@@ -96,14 +97,14 @@ describe('ReleaseEntry - Markdown Rendering', () => {
       <ReleaseEntry category="features" content="Text with `code` here" />
     );
 
-    const entry = container.firstChild as HTMLElement;
+    const contentDiv = container.querySelector('.flex-1') as HTMLElement;
     // Verify Tailwind arbitrary selectors for code styling
-    expect(entry.className).toContain('[&_code]:bg-[#2a2a28]');
-    expect(entry.className).toContain('[&_code]:px-1.5');
-    expect(entry.className).toContain('[&_code]:py-0.5');
-    expect(entry.className).toContain('[&_code]:rounded');
-    expect(entry.className).toContain('[&_code]:text-[15px]');
-    expect(entry.className).toContain('[&_code]:font-mono');
+    expect(contentDiv.className).toContain('[&_code]:bg-[#2a2a28]');
+    expect(contentDiv.className).toContain('[&_code]:px-1.5');
+    expect(contentDiv.className).toContain('[&_code]:py-0.5');
+    expect(contentDiv.className).toContain('[&_code]:rounded');
+    expect(contentDiv.className).toContain('[&_code]:text-[15px]');
+    expect(contentDiv.className).toContain('[&_code]:font-mono');
   });
 
   it('should render links with target="_blank" and rel attributes', () => {
@@ -130,11 +131,11 @@ describe('ReleaseEntry - Markdown Rendering', () => {
       />
     );
 
-    const entry = container.firstChild as HTMLElement;
+    const contentDiv = container.querySelector('.flex-1') as HTMLElement;
     // Verify Tailwind arbitrary selectors for link styling
-    expect(entry.className).toContain('[&_a]:text-[#6a9bcc]');
-    expect(entry.className).toContain('[&_a:hover]:text-[#8bb4d9]');
-    expect(entry.className).toContain('[&_a]:underline');
+    expect(contentDiv.className).toContain('[&_a]:text-[#6a9bcc]');
+    expect(contentDiv.className).toContain('[&_a:hover]:text-[#8bb4d9]');
+    expect(contentDiv.className).toContain('[&_a]:underline');
   });
 
   it('should render unordered lists correctly', () => {
@@ -156,15 +157,15 @@ describe('ReleaseEntry - Markdown Rendering', () => {
       <ReleaseEntry category="features" content={content} />
     );
 
-    const entry = container.firstChild as HTMLElement;
+    const contentDiv = container.querySelector('.flex-1') as HTMLElement;
     // Verify Tailwind arbitrary selectors for list styling
-    expect(entry.className).toContain('[&_ul]:list-disc');
-    expect(entry.className).toContain('[&_ul]:ml-6');
-    expect(entry.className).toContain('[&_ul]:my-2');
-    expect(entry.className).toContain('[&_ol]:list-decimal');
-    expect(entry.className).toContain('[&_ol]:ml-6');
-    expect(entry.className).toContain('[&_ol]:my-2');
-    expect(entry.className).toContain('[&_li]:my-1');
+    expect(contentDiv.className).toContain('[&_ul]:list-disc');
+    expect(contentDiv.className).toContain('[&_ul]:ml-6');
+    expect(contentDiv.className).toContain('[&_ul]:my-2');
+    expect(contentDiv.className).toContain('[&_ol]:list-decimal');
+    expect(contentDiv.className).toContain('[&_ol]:ml-6');
+    expect(contentDiv.className).toContain('[&_ol]:my-2');
+    expect(contentDiv.className).toContain('[&_li]:my-1');
   });
 
   it('should render bold and italic text', () => {
@@ -293,5 +294,24 @@ describe('ReleaseEntry - CHANGELOG Integration', () => {
 
     const code = container.querySelector('code');
     expect(code?.textContent).toBe('const result = parse(input)');
+  });
+});
+
+describe('ReleaseEntry - CategoryBadge Integration', () => {
+  it('should render CategoryBadge with correct category', () => {
+    render(<ReleaseEntry category="bugfixes" content="Fix bug" />);
+    expect(screen.getByText('Bug Fixes')).toBeInTheDocument();
+  });
+
+  it('should render CategoryBadge for features category', () => {
+    render(<ReleaseEntry category="features" content="Add feature" />);
+    expect(screen.getByText('Features')).toBeInTheDocument();
+  });
+
+  it('should render badge alongside content', () => {
+    render(<ReleaseEntry category="performance" content="Speed up rendering" />);
+    expect(screen.getByText('Performance')).toBeInTheDocument();
+    // Content should also render
+    expect(screen.getByText(/Speed up rendering/)).toBeInTheDocument();
   });
 });

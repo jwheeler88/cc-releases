@@ -1,7 +1,6 @@
 import { marked } from 'marked';
-import type { Release, ReleaseEntry, Category } from '@/lib/types';
-
-const DEFAULT_CATEGORY: Category = 'features';
+import type { Release, ReleaseEntry } from '@/lib/types';
+import { categorizeEntry } from './categorizeEntry';
 
 export function parseChangelog(markdown: string): Release[] {
   if (!markdown || markdown.trim() === '') {
@@ -46,9 +45,10 @@ export function parseChangelog(markdown: string): Release[] {
         const entries: ReleaseEntry[] = [];
         for (const item of token.items) {
           if (item.text) {
+            const content = item.text.trim();
             entries.push({
-              content: item.text.trim(),
-              category: DEFAULT_CATEGORY, // Default category per story requirements
+              content,
+              category: categorizeEntry(content),
             });
           }
         }

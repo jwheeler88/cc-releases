@@ -1,6 +1,7 @@
 import { marked } from 'marked';
 import type { Category } from '@/lib/types';
 import { CATEGORIES } from '@/lib/constants';
+import { CategoryBadge } from './CategoryBadge';
 
 interface ReleaseEntryProps {
   category: Category;
@@ -42,15 +43,23 @@ export function ReleaseEntry({ category, content }: ReleaseEntryProps) {
 
   return (
     <div
-      className="pl-4 py-2 text-[17px] font-[Lora] text-[#faf9f5] leading-relaxed
-                 hover:bg-[#1a1a19] transition-colors rounded-r
-                 [&_code]:bg-[#2a2a28] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-[15px] [&_code]:font-mono
-                 [&_a]:text-[#6a9bcc] [&_a:hover]:text-[#8bb4d9] [&_a]:underline
-                 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2
-                 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2
-                 [&_li]:my-1"
+      className="flex items-start gap-3 pl-4 py-2"
       style={{ borderLeft: `2px solid ${color}` }}
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
+    >
+      {/* Badge - fixed width, no shrink */}
+      <CategoryBadge category={category} className="shrink-0 mt-0.5" />
+
+      {/* Content - flexible width with markdown */}
+      <div
+        className="flex-1 text-[17px] font-[Lora] text-[#faf9f5] leading-relaxed
+                   hover:bg-[#1a1a19] transition-colors rounded-r
+                   [&_code]:bg-[#2a2a28] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-[15px] [&_code]:font-mono
+                   [&_a]:text-[#6a9bcc] [&_a:hover]:text-[#8bb4d9] [&_a]:underline
+                   [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2
+                   [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2
+                   [&_li]:my-1"
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    </div>
   );
 }
