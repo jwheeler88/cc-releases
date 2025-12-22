@@ -4,13 +4,14 @@ import { useSearch } from "@/hooks/useSearch";
 import { LoadingState } from "@/components/LoadingState";
 import { ErrorState } from "@/components/ErrorState";
 import { HeroSection } from "@/components/HeroSection";
+import { SearchStatus } from "@/components/SearchStatus";
 import { ReleaseSection } from "@/components/ReleaseSection";
 import type { Release } from "@/lib/types";
 
 function App() {
   const { releases, isLoading, error, retry } = useChangelog();
   const [query, setQuery] = useState('');
-  const { filteredReleases } = useSearch({ releases, query });
+  const { filteredReleases, matchCount, releaseCount } = useSearch({ releases, query });
 
   // State machine: Loading → Error | Success
   if (isLoading) {
@@ -28,6 +29,13 @@ function App() {
       <HeroSection
         query={query}
         onQueryChange={setQuery}
+      />
+
+      {/* SearchStatus component - full width */}
+      <SearchStatus
+        query={query}
+        matchCount={matchCount}
+        releaseCount={releaseCount}
       />
 
       {/* Page container with padding */}
