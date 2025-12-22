@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { CategoryGroup } from './CategoryGroup';
+import { ReleaseEntry } from './ReleaseEntry';
 import { CATEGORIES } from '@/lib/constants';
 import type { Category } from '@/lib/types';
 
@@ -218,6 +219,27 @@ describe('CategoryGroup', () => {
   });
 
   // ============================================================================
+  // INTEGRATION TESTS (1 test)
+  // ============================================================================
+
+  describe('Integration Tests', () => {
+    it('should render with real ReleaseEntry children', () => {
+      render(
+        <CategoryGroup category="features">
+          <ReleaseEntry content="Added new feature" category="features" />
+          <ReleaseEntry content="Another feature" category="features" />
+        </CategoryGroup>
+      );
+
+      expect(screen.getByText(/Added new feature/)).toBeInTheDocument();
+      expect(screen.getByText(/Another feature/)).toBeInTheDocument();
+
+      const header = screen.getByRole('heading', { level: 3 });
+      expect(header).toHaveTextContent('Features');
+    });
+  });
+
+  // ============================================================================
   // CATEGORIES INTEGRATION TESTS (2 tests)
   // ============================================================================
 
@@ -261,7 +283,7 @@ describe('CategoryGroup', () => {
   });
 
   // ============================================================================
-  // ACCESSIBILITY TESTS (2 tests)
+  // ACCESSIBILITY TESTS (4 tests)
   // ============================================================================
 
   describe('Accessibility Tests', () => {
@@ -279,6 +301,20 @@ describe('CategoryGroup', () => {
       expect(heading).toBeInTheDocument();
     });
 
+    it('should use aria-labelledby to connect section to heading', () => {
+      const { container } = render(
+        <CategoryGroup category="features">
+          <div>Test child</div>
+        </CategoryGroup>
+      );
+
+      const section = container.firstChild as HTMLElement;
+      const heading = screen.getByRole('heading', { level: 3 });
+
+      expect(heading).toHaveAttribute('id', 'category-features');
+      expect(section).toHaveAttribute('aria-labelledby', 'category-features');
+    });
+
     it('should support ARIA attributes via props spreading', () => {
       const { container } = render(
         <CategoryGroup category="features" aria-label="Feature updates">
@@ -288,6 +324,27 @@ describe('CategoryGroup', () => {
 
       const section = container.firstChild as HTMLElement;
       expect(section).toHaveAttribute('aria-label', 'Feature updates');
+    });
+
+    it('should spread additional props to section element', () => {
+      const handleClick = vi.fn();
+      const { container } = render(
+        <CategoryGroup
+          category="features"
+          data-testid="custom-group"
+          id="features-section"
+          onClick={handleClick}
+        >
+          <div>Test</div>
+        </CategoryGroup>
+      );
+
+      const section = container.firstChild as HTMLElement;
+      expect(section).toHaveAttribute('data-testid', 'custom-group');
+      expect(section).toHaveAttribute('id', 'features-section');
+
+      fireEvent.click(section);
+      expect(handleClick).toHaveBeenCalledTimes(1);
     });
   });
 });

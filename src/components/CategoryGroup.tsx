@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Category } from '@/lib/types';
 import { CATEGORIES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
@@ -39,18 +40,21 @@ export function CategoryGroup({
   ...props
 }: CategoryGroupProps): React.JSX.Element | null {
   // AC8: Empty categories are not displayed
-  if (!children || (Array.isArray(children) && children.length === 0)) {
+  // Use React.Children.count() to correctly handle edge cases (0, "", false are valid React children)
+  if (React.Children.count(children) === 0) {
     return null;
   }
 
   const { label, color } = CATEGORIES[category];
+  const headingId = `category-${category}`;
 
   return (
-    <section className={cn(categoryGroupVariants(), className)} {...props}>
+    <section className={cn(categoryGroupVariants(), className)} aria-labelledby={headingId} {...props}>
       <h3
+        id={headingId}
         className="text-lg font-semibold font-[Poppins] mb-4 pb-2"
         style={{
-          color: color,
+          color,
           borderBottom: `2px solid ${color}`,
         }}
       >
