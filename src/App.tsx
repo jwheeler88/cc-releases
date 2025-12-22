@@ -2,6 +2,7 @@ import { useChangelog } from "@/hooks/useChangelog";
 import { LoadingState } from "@/components/LoadingState";
 import { ErrorState } from "@/components/ErrorState";
 import { ReleaseSection } from "@/components/ReleaseSection";
+import type { Release } from "@/lib/types";
 
 function App() {
   const { releases, isLoading, error, retry } = useChangelog();
@@ -27,7 +28,7 @@ function App() {
 
           {/* Release list - space-y-0 because ReleaseSection has py-16 internally */}
           <div className="space-y-0">
-            {releases.map((release) => (
+            {releases.map((release: Release) => (
               <ReleaseSection
                 key={release.version}
                 version={release.version}
