@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { HeroSection } from './HeroSection';
@@ -9,6 +9,10 @@ describe('HeroSection', () => {
     onQueryChange: vi.fn(),
     onSuggestionClick: vi.fn(),
   };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   describe('Content rendering', () => {
     it('should render title "Claude Code"', () => {
@@ -83,6 +87,17 @@ describe('HeroSection', () => {
       await userEvent.click(pill);
 
       expect(onSuggestionClick).toHaveBeenCalledWith('hooks');
+    });
+
+    it('should handle missing onSuggestionClick gracefully', async () => {
+      const onQueryChange = vi.fn();
+      render(<HeroSection query="" onQueryChange={onQueryChange} />);
+
+      const pill = screen.getByRole('button', { name: 'MCP' });
+      await userEvent.click(pill);
+
+      // Should still call onQueryChange without error
+      expect(onQueryChange).toHaveBeenCalledWith('MCP');
     });
   });
 

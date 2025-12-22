@@ -1,6 +1,6 @@
 import { Search } from 'lucide-react';
 
-interface HeroSectionProps {
+export interface HeroSectionProps {
   query: string;
   onQueryChange: (query: string) => void;
   onSuggestionClick?: (suggestion: string) => void;
@@ -51,6 +51,7 @@ export function HeroSection({
             placeholder="Search releases... try 'MCP' or 'hooks'"
             className="bg-transparent flex-1 outline-none text-[#faf9f5] pl-4 placeholder:text-[#b0aea5]/70"
             aria-describedby="search-hint"
+            autoComplete="off"
           />
         </div>
         <span id="search-hint" className="sr-only">
