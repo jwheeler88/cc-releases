@@ -115,10 +115,11 @@ describe('CategoryBadge', () => {
 
     it('should use colors from CATEGORIES constant', () => {
       const { container, rerender } = render(<CategoryBadge category="features" />);
-      const badge = container.querySelector('span');
+      let badge = container.querySelector('span');
       expect(badge).toHaveStyle({ color: CATEGORIES.features.color });
 
       rerender(<CategoryBadge category="performance" />);
+      badge = container.querySelector('span'); // Re-query after rerender
       expect(badge).toHaveStyle({ color: CATEGORIES.performance.color });
     });
   });
