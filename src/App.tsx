@@ -1,11 +1,16 @@
+import { useState } from 'react';
 import { useChangelog } from "@/hooks/useChangelog";
+import { useSearch } from "@/hooks/useSearch";
 import { LoadingState } from "@/components/LoadingState";
 import { ErrorState } from "@/components/ErrorState";
+import { HeroSection } from "@/components/HeroSection";
 import { ReleaseSection } from "@/components/ReleaseSection";
 import type { Release } from "@/lib/types";
 
 function App() {
   const { releases, isLoading, error, retry } = useChangelog();
+  const [query, setQuery] = useState('');
+  const { filteredReleases } = useSearch({ releases, query });
 
   // State machine: Loading → Error | Success
   if (isLoading) {
@@ -19,16 +24,19 @@ function App() {
   // Success state: render all releases
   return (
     <main className="min-h-screen bg-background text-foreground">
+      {/* HeroSection OUTSIDE centered wrapper - full width */}
+      <HeroSection
+        query={query}
+        onQueryChange={setQuery}
+      />
+
       {/* Page container with padding */}
       <div className="p-8">
         {/* Centered content wrapper with max-width constraint */}
         <div className="max-w-[720px] mx-auto">
-          {/* App title - placeholder for Epic 4 HeroSection */}
-          <h1 className="text-4xl font-bold mb-8 font-heading">cc-releases</h1>
-
-          {/* Release list - space-y-0 because ReleaseSection has py-16 internally */}
+          {/* Release list - now uses filteredReleases - space-y-0 because ReleaseSection has py-16 internally */}
           <div className="space-y-0">
-            {releases.map((release: Release) => (
+            {filteredReleases.map((release: Release) => (
               <ReleaseSection
                 key={release.version}
                 version={release.version}

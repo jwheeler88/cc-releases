@@ -117,7 +117,7 @@ describe("App", () => {
 
       const heading = screen.getByRole("heading", { level: 1 });
       expect(heading).toBeInTheDocument();
-      expect(heading).toHaveTextContent("cc-releases");
+      expect(heading).toHaveTextContent("Claude Code");
     });
 
     it("renders all releases in the list", () => {
