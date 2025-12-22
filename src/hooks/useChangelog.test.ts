@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { renderHook, waitFor, act } from '@testing-library/react';
-import { useChangelog } from './useChangelog';
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { renderHook, waitFor, act } from "@testing-library/react";
+import { useChangelog } from "./useChangelog";
 
-describe('useChangelog', () => {
+describe("useChangelog", () => {
   const mockMarkdown = `## 1.0.53
 _Released 2025-01-15_
 
@@ -22,7 +22,7 @@ _Released 2025-01-10_
     vi.restoreAllMocks();
   });
 
-  it('should have initial loading state', () => {
+  it("should have initial loading state", () => {
     vi.mocked(global.fetch).mockImplementation(() => new Promise(() => {})); // Never resolves
 
     const { result } = renderHook(() => useChangelog());
@@ -30,10 +30,10 @@ _Released 2025-01-10_
     expect(result.current.isLoading).toBe(true);
     expect(result.current.releases).toEqual([]);
     expect(result.current.error).toBe(null);
-    expect(typeof result.current.retry).toBe('function');
+    expect(typeof result.current.retry).toBe("function");
   });
 
-  it('should fetch and parse changelog successfully', async () => {
+  it("should fetch and parse changelog successfully", async () => {
     vi.mocked(global.fetch).mockResolvedValueOnce({
       ok: true,
       status: 200,
@@ -49,15 +49,15 @@ _Released 2025-01-10_
     });
 
     expect(result.current.releases).toHaveLength(2);
-    expect(result.current.releases[0].version).toBe('1.0.53');
-    expect(result.current.releases[0].date).toBe('2025-01-15');
+    expect(result.current.releases[0].version).toBe("1.0.53");
+    expect(result.current.releases[0].date).toBe("2025-01-15");
     expect(result.current.releases[0].entries).toHaveLength(2);
-    expect(result.current.releases[1].version).toBe('1.0.52');
+    expect(result.current.releases[1].version).toBe("1.0.52");
     expect(result.current.error).toBe(null);
   });
 
-  it('should handle network errors', async () => {
-    vi.mocked(global.fetch).mockRejectedValueOnce(new Error('Network failure'));
+  it("should handle network errors", async () => {
+    vi.mocked(global.fetch).mockRejectedValueOnce(new Error("Network failure"));
 
     const { result } = renderHook(() => useChangelog());
 
@@ -69,12 +69,12 @@ _Released 2025-01-10_
     expect(result.current.releases).toEqual([]);
   });
 
-  it('should handle HTTP errors', async () => {
+  it("should handle HTTP errors", async () => {
     vi.mocked(global.fetch).mockResolvedValueOnce({
       ok: false,
       status: 404,
-      statusText: 'Not Found',
-      text: async () => '',
+      statusText: "Not Found",
+      text: async () => "",
     } as Response);
 
     const { result } = renderHook(() => useChangelog());
@@ -84,13 +84,13 @@ _Released 2025-01-10_
     });
 
     expect(result.current.error).toBeInstanceOf(Error);
-    expect(result.current.error?.message).toContain('404');
+    expect(result.current.error?.message).toContain("404");
     expect(result.current.releases).toEqual([]);
   });
 
-  it('should handle retry functionality', async () => {
+  it("should handle retry functionality", async () => {
     // First call fails
-    vi.mocked(global.fetch).mockRejectedValueOnce(new Error('Network failure'));
+    vi.mocked(global.fetch).mockRejectedValueOnce(new Error("Network failure"));
 
     const { result } = renderHook(() => useChangelog());
 
@@ -125,10 +125,10 @@ _Released 2025-01-10_
 
     expect(result.current.error).toBe(null);
     expect(result.current.releases).toHaveLength(2);
-    expect(result.current.releases[0].version).toBe('1.0.53');
+    expect(result.current.releases[0].version).toBe("1.0.53");
   });
 
-  it('should call CHANGELOG_URL with fetch', async () => {
+  it("should call CHANGELOG_URL with fetch", async () => {
     vi.mocked(global.fetch).mockResolvedValueOnce({
       ok: true,
       status: 200,
@@ -138,11 +138,13 @@ _Released 2025-01-10_
     renderHook(() => useChangelog());
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith('https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md');
+      expect(global.fetch).toHaveBeenCalledWith(
+        "https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md",
+      );
     });
   });
 
-  it('should only fetch once on mount', async () => {
+  it("should only fetch once on mount", async () => {
     vi.mocked(global.fetch).mockResolvedValue({
       ok: true,
       status: 200,
@@ -163,11 +165,11 @@ _Released 2025-01-10_
     });
   });
 
-  it('should handle empty changelog', async () => {
+  it("should handle empty changelog", async () => {
     vi.mocked(global.fetch).mockResolvedValueOnce({
       ok: true,
       status: 200,
-      text: async () => '',
+      text: async () => "",
     } as Response);
 
     const { result } = renderHook(() => useChangelog());
@@ -180,7 +182,7 @@ _Released 2025-01-10_
     expect(result.current.error).toBe(null);
   });
 
-  it('should sort releases in reverse chronological order', async () => {
+  it("should sort releases in reverse chronological order", async () => {
     const unsortedMarkdown = `## 1.0.50
 _Released 2025-01-01_
 
@@ -210,8 +212,8 @@ _Released 2025-01-10_
 
     expect(result.current.releases).toHaveLength(3);
     // Should be sorted newest first: 2.0.5, 1.0.52, 1.0.50
-    expect(result.current.releases[0].version).toBe('2.0.5');
-    expect(result.current.releases[1].version).toBe('1.0.52');
-    expect(result.current.releases[2].version).toBe('1.0.50');
+    expect(result.current.releases[0].version).toBe("2.0.5");
+    expect(result.current.releases[1].version).toBe("1.0.52");
+    expect(result.current.releases[2].version).toBe("1.0.50");
   });
 });

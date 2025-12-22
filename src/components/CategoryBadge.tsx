@@ -1,14 +1,15 @@
-import type { Category } from '@/lib/types';
-import { CATEGORIES } from '@/lib/constants';
-import { cn } from '@/lib/utils';
-import { cva, type VariantProps } from 'class-variance-authority';
+import type { Category } from "@/lib/types";
+import { CATEGORIES } from "@/lib/constants";
+import { cn } from "@/lib/utils";
+import { cva, type VariantProps } from "class-variance-authority";
 
 const categoryBadgeVariants = cva(
-  'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border font-heading'
+  "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border font-heading",
 );
 
 interface CategoryBadgeProps
-  extends React.ComponentPropsWithoutRef<'span'>,
+  extends
+    React.ComponentPropsWithoutRef<"span">,
     VariantProps<typeof categoryBadgeVariants> {
   category: Category;
 }
@@ -40,8 +41,8 @@ export function CategoryBadge({
       className={cn(categoryBadgeVariants(), className)}
       style={{
         backgroundColor: `${color}33`, // 20% opacity
-        borderColor: `${color}4D`,     // 30% opacity
-        color: color,                  // Full opacity for text
+        borderColor: `${color}4D`, // 30% opacity
+        color: color, // Full opacity for text
       }}
       {...props}
     >

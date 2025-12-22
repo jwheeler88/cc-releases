@@ -1,10 +1,10 @@
-import { describe, it, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { useState } from 'react';
-import { LoadingState } from './LoadingState';
+import { describe, it, expect } from "vitest";
+import { render } from "@testing-library/react";
+import { useState } from "react";
+import { LoadingState } from "./LoadingState";
 
-describe('LoadingState - Integration Pattern', () => {
-  it('should demonstrate useChangelog integration pattern', () => {
+describe("LoadingState - Integration Pattern", () => {
+  it("should demonstrate useChangelog integration pattern", () => {
     // This test documents how Story 2.7 will integrate LoadingState
     // with the useChangelog hook's isLoading state
 
@@ -19,9 +19,7 @@ describe('LoadingState - Integration Pattern', () => {
       }
 
       return (
-        <div data-testid="releases-loaded">
-          {releases.length} releases
-        </div>
+        <div data-testid="releases-loaded">{releases.length} releases</div>
       );
     };
 
@@ -29,12 +27,18 @@ describe('LoadingState - Integration Pattern', () => {
 
     // When isLoading is true, LoadingState should render
     expect(container.querySelector('[aria-busy="true"]')).toBeInTheDocument();
-    expect(container.querySelector('[aria-label="Loading releases"]')).toBeInTheDocument();
+    expect(
+      container.querySelector('[aria-label="Loading releases"]'),
+    ).toBeInTheDocument();
   });
 
-  it('should transition from loading to content state', () => {
+  it("should transition from loading to content state", () => {
     // Documents the transition pattern for Story 2.7
-    const MockReleaseListWithTransition = ({ isLoading }: { isLoading: boolean }) => {
+    const MockReleaseListWithTransition = ({
+      isLoading,
+    }: {
+      isLoading: boolean;
+    }) => {
       if (isLoading) {
         return <LoadingState />;
       }
@@ -43,14 +47,16 @@ describe('LoadingState - Integration Pattern', () => {
 
     // Render in loading state
     const { rerender, container, queryByTestId } = render(
-      <MockReleaseListWithTransition isLoading={true} />
+      <MockReleaseListWithTransition isLoading={true} />,
     );
     expect(container.querySelector('[aria-busy="true"]')).toBeInTheDocument();
-    expect(queryByTestId('content-loaded')).not.toBeInTheDocument();
+    expect(queryByTestId("content-loaded")).not.toBeInTheDocument();
 
     // Transition to loaded state
     rerender(<MockReleaseListWithTransition isLoading={false} />);
-    expect(container.querySelector('[aria-busy="true"]')).not.toBeInTheDocument();
-    expect(queryByTestId('content-loaded')).toBeInTheDocument();
+    expect(
+      container.querySelector('[aria-busy="true"]'),
+    ).not.toBeInTheDocument();
+    expect(queryByTestId("content-loaded")).toBeInTheDocument();
   });
 });

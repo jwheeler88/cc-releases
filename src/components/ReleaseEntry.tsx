@@ -1,7 +1,8 @@
-import { marked } from 'marked';
-import type { Category } from '@/lib/types';
-import { CATEGORIES } from '@/lib/constants';
-import { CategoryBadge } from './CategoryBadge';
+import { marked } from "marked";
+import type { Category } from "@/lib/types";
+import { CATEGORIES } from "@/lib/constants";
+import { CategoryBadge } from "./CategoryBadge";
+import { cn } from "@/lib/utils";
 
 interface ReleaseEntryProps {
   category: Category;
@@ -14,11 +15,10 @@ const linkRenderer = new marked.Renderer();
 // Override link renderer to add target="_blank" and sanitize hrefs
 linkRenderer.link = ({ href, title, tokens }) => {
   // Sanitize href - only allow http/https/mailto protocols to prevent XSS
-  const sanitizedHref = href?.startsWith('javascript:') || href?.startsWith('data:')
-    ? '#'
-    : href;
-  const text = tokens.map(t => t.raw).join('');
-  const titleAttr = title ? ` title="${title}"` : '';
+  const sanitizedHref =
+    href?.startsWith("javascript:") || href?.startsWith("data:") ? "#" : href;
+  const text = tokens.map((t) => t.raw).join("");
+  const titleAttr = title ? ` title="${title}"` : "";
   return `<a href="${sanitizedHref}"${titleAttr} target="_blank" rel="noopener noreferrer">${text}</a>`;
 };
 
@@ -31,7 +31,7 @@ function renderMarkdown(content: string): string {
   return marked.parse(content, {
     renderer: linkRenderer,
     breaks: true,
-    gfm: true
+    gfm: true,
   }) as string;
 }
 
@@ -51,13 +51,21 @@ export function ReleaseEntry({ category, content }: ReleaseEntryProps) {
 
       {/* Content - flexible width with markdown */}
       <div
-        className="flex-1 text-[17px] font-[Lora] text-[#faf9f5] leading-relaxed
-                   hover:bg-[#1a1a19] transition-colors rounded-r
-                   [&_code]:bg-[#2a2a28] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-[15px] [&_code]:font-mono
-                   [&_a]:text-[#6a9bcc] [&_a:hover]:text-[#8bb4d9] [&_a]:underline
-                   [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2
-                   [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2
-                   [&_li]:my-1"
+        className={cn(
+          // Base layout and typography
+          "flex-1 text-[17px] font-[Lora] text-[#faf9f5] leading-relaxed",
+          // Hover states
+          "hover:bg-[#1a1a19] transition-colors rounded-r",
+          // Inline code styling
+          "[&_code]:bg-[#2a2a28] [&_code]:px-1.5 [&_code]:py-0.5",
+          "[&_code]:rounded [&_code]:text-[15px] [&_code]:font-mono",
+          // Link styling
+          "[&_a]:text-[#6a9bcc] [&_a:hover]:text-[#8bb4d9] [&_a]:underline",
+          // List styling
+          "[&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-2",
+          "[&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:my-2",
+          "[&_li]:my-1",
+        )}
         dangerouslySetInnerHTML={{ __html: html }}
       />
     </div>

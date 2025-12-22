@@ -1,7 +1,7 @@
-import { useChangelog } from '@/hooks/useChangelog';
-import { LoadingState } from '@/components/LoadingState';
-import { ErrorState } from '@/components/ErrorState';
-import { ReleaseSection } from '@/components/ReleaseSection';
+import { useChangelog } from "@/hooks/useChangelog";
+import { LoadingState } from "@/components/LoadingState";
+import { ErrorState } from "@/components/ErrorState";
+import { ReleaseSection } from "@/components/ReleaseSection";
 
 function App() {
   const { releases, isLoading, error, retry } = useChangelog();

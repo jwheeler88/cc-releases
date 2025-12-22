@@ -1,13 +1,14 @@
-import React from 'react';
-import type { Category } from '@/lib/types';
-import { CATEGORIES } from '@/lib/constants';
-import { cn } from '@/lib/utils';
-import { cva, type VariantProps } from 'class-variance-authority';
+import React from "react";
+import type { Category } from "@/lib/types";
+import { CATEGORIES } from "@/lib/constants";
+import { cn } from "@/lib/utils";
+import { cva, type VariantProps } from "class-variance-authority";
 
-const categoryGroupVariants = cva('mb-8');
+const categoryGroupVariants = cva("mb-8");
 
 interface CategoryGroupProps
-  extends React.ComponentPropsWithoutRef<'section'>,
+  extends
+    React.ComponentPropsWithoutRef<"section">,
     VariantProps<typeof categoryGroupVariants> {
   category: Category;
   children: React.ReactNode;
@@ -49,7 +50,11 @@ export function CategoryGroup({
   const headingId = `category-${category}`;
 
   return (
-    <section className={cn(categoryGroupVariants(), className)} aria-labelledby={headingId} {...props}>
+    <section
+      className={cn(categoryGroupVariants(), className)}
+      aria-labelledby={headingId}
+      {...props}
+    >
       <h3
         id={headingId}
         className="text-lg font-semibold font-[Poppins] mb-4 pb-2"

@@ -1,5 +1,5 @@
-import { AlertCircle, RotateCw } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { AlertCircle, RotateCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ErrorStateProps {
   error: Error;
@@ -54,65 +54,67 @@ export function ErrorState({ error, retry }: ErrorStateProps) {
  */
 function detectErrorType(error: Error): ErrorType {
   // Handle empty or missing error messages
-  const message = (error.message || '').toLowerCase();
+  const message = (error.message || "").toLowerCase();
 
   // Check error type/name for additional context (e.g., TypeError, NetworkError)
-  const errorName = (error.name || '').toLowerCase();
+  const errorName = (error.name || "").toLowerCase();
 
   // Network errors (including HTTP status errors like 404, 500)
   // useChangelog throws: "Failed to fetch: 404 Not Found"
   // TypeError: Failed to fetch (Chrome/Firefox)
   // Browser-specific network errors
   if (
-    message.includes('network') ||
-    message.includes('failed to fetch') ||
-    message.includes('fetch') || // Catch bare "fetch" errors
-    message.includes('offline') ||
-    message.includes('status') ||
-    message.includes('cors') ||
-    message.includes('load failed') || // Safari network error
-    message.includes('networkerror') || // Firefox
-    errorName === 'typeerror' || // TypeError: Failed to fetch
-    errorName === 'networkerror'
+    message.includes("network") ||
+    message.includes("failed to fetch") ||
+    message.includes("fetch") || // Catch bare "fetch" errors
+    message.includes("offline") ||
+    message.includes("status") ||
+    message.includes("cors") ||
+    message.includes("load failed") || // Safari network error
+    message.includes("networkerror") || // Firefox
+    errorName === "typeerror" || // TypeError: Failed to fetch
+    errorName === "networkerror"
   ) {
-    return 'network';
+    return "network";
   }
 
   // Timeout errors
   if (
-    message.includes('timeout') ||
-    message.includes('aborted') ||
-    message.includes('timed out') ||
-    errorName === 'timeouterror'
+    message.includes("timeout") ||
+    message.includes("aborted") ||
+    message.includes("timed out") ||
+    errorName === "timeouterror"
   ) {
-    return 'timeout';
+    return "timeout";
   }
 
   // Parse errors
   if (
-    message.includes('parse') ||
-    message.includes('invalid') ||
-    message.includes('malformed') ||
-    message.includes('syntax') ||
-    errorName === 'syntaxerror'
+    message.includes("parse") ||
+    message.includes("invalid") ||
+    message.includes("malformed") ||
+    message.includes("syntax") ||
+    errorName === "syntaxerror"
   ) {
-    return 'parse';
+    return "parse";
   }
 
   // Unknown/general errors (fallback for empty messages or unrecognized errors)
-  return 'unknown';
+  return "unknown";
 }
 
-type ErrorType = 'network' | 'timeout' | 'parse' | 'unknown';
+type ErrorType = "network" | "timeout" | "parse" | "unknown";
 
 /**
  * Get user-friendly error message for error type
  */
 function getErrorMessage(type: ErrorType): string {
   const messages: Record<ErrorType, string> = {
-    network: "Unable to load release notes. Please check your internet connection and try again.",
+    network:
+      "Unable to load release notes. Please check your internet connection and try again.",
     timeout: "Loading is taking longer than expected. Please try again.",
-    parse: "Something went wrong while processing the release notes. Please try again.",
+    parse:
+      "Something went wrong while processing the release notes. Please try again.",
     unknown: "Unable to load release notes. Please try again.",
   };
 
