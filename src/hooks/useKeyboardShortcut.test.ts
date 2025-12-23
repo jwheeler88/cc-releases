@@ -150,4 +150,50 @@ describe('useKeyboardShortcut', () => {
 
     expect(mockOnTrigger).not.toHaveBeenCalled();
   });
+
+  it('should handle rapid fire key presses without breaking', () => {
+    renderHook(() =>
+      useKeyboardShortcut({
+        onTrigger: mockOnTrigger,
+        key: 'k',
+        metaKey: true
+      })
+    );
+
+    // Fire 10 rapid key presses
+    for (let i = 0; i < 10; i++) {
+      const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true });
+      document.dispatchEvent(event);
+    }
+
+    // Should trigger exactly 10 times (no debouncing, just resilience)
+    expect(mockOnTrigger).toHaveBeenCalledTimes(10);
+  });
+
+  it('should only trigger on correct modifier when both metaKey and ctrlKey configured', () => {
+    // Edge case: if someone configures both, it should work with either
+    renderHook(() =>
+      useKeyboardShortcut({
+        onTrigger: mockOnTrigger,
+        key: 'k',
+        metaKey: true,
+        ctrlKey: true
+      })
+    );
+
+    // Cmd+K should trigger
+    const metaEvent = new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true });
+    document.dispatchEvent(metaEvent);
+    expect(mockOnTrigger).toHaveBeenCalledTimes(1);
+
+    // Ctrl+K should also trigger
+    const ctrlEvent = new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true });
+    document.dispatchEvent(ctrlEvent);
+    expect(mockOnTrigger).toHaveBeenCalledTimes(2);
+
+    // Just K should NOT trigger
+    const plainEvent = new KeyboardEvent('keydown', { key: 'k', bubbles: true });
+    document.dispatchEvent(plainEvent);
+    expect(mockOnTrigger).toHaveBeenCalledTimes(2); // Still 2
+  });
 });

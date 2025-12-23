@@ -191,7 +191,44 @@ describe('HeroSection', () => {
 
       // Should show either ⌘K or Ctrl+K depending on platform
       const input = screen.getByPlaceholderText(/search releases/i);
-      expect(input.getAttribute('placeholder')).toMatch(/\(.*K\)/);
+      const placeholder = input.getAttribute('placeholder');
+      expect(placeholder).toMatch(/\(.*K\)/);
+      // In JSDOM (non-Mac), should show Ctrl+K
+      expect(placeholder).toContain('Ctrl+K');
+    });
+
+    it('should not blur when Escape pressed and input not focused', () => {
+      render(<HeroSection {...defaultProps} />);
+
+      const input = screen.getByPlaceholderText(/search releases/i) as HTMLInputElement;
+      // Input should NOT be focused initially
+      expect(document.activeElement).not.toBe(input);
+
+      // Dispatch Escape on the document (not through the input)
+      const event = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true });
+      document.dispatchEvent(event);
+
+      // Should not cause any errors, input still not focused
+      expect(document.activeElement).not.toBe(input);
+    });
+
+    it('should select all text when shortcut focuses input with existing value', () => {
+      render(<HeroSection {...defaultProps} query="existing search" />);
+
+      const input = screen.getByPlaceholderText(/search releases/i) as HTMLInputElement;
+
+      // Simulate Ctrl+K to focus and select
+      const event = new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true });
+      document.dispatchEvent(event);
+
+      // Verify focus
+      expect(document.activeElement).toBe(input);
+
+      // In JSDOM, selection behavior is limited, but we can verify the select() was called
+      // by checking the input is focused (select() internally calls focus first)
+      // The implementation calls both focus() and select() - verify selection range
+      expect(input.selectionStart).toBe(0);
+      expect(input.selectionEnd).toBe(input.value.length);
     });
   });
 });
