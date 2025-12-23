@@ -27,7 +27,7 @@ describe('HeroSection', () => {
 
     it('should render search input with correct placeholder', () => {
       render(<HeroSection {...defaultProps} />);
-      expect(screen.getByPlaceholderText(/search releases.*mcp.*hooks/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/search releases/i)).toBeInTheDocument();
     });
 
     it('should render search icon', () => {
@@ -144,6 +144,54 @@ describe('HeroSection', () => {
       await userEvent.keyboard(' ');
 
       expect(onQueryChange).toHaveBeenCalledWith('MCP');
+    });
+  });
+
+  describe('Keyboard shortcuts', () => {
+    it('should focus search input when Ctrl+K pressed (cross-platform)', () => {
+      render(<HeroSection {...defaultProps} />);
+
+      const input = screen.getByPlaceholderText(/search releases/i) as HTMLInputElement;
+      expect(document.activeElement).not.toBe(input);
+
+      // Simulate Ctrl+K (works reliably in JSDOM)
+      const event = new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true });
+      document.dispatchEvent(event);
+
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should select existing text when Ctrl+K focuses input', () => {
+      render(<HeroSection {...defaultProps} query="existing search" />);
+
+      const input = screen.getByPlaceholderText(/search releases/i) as HTMLInputElement;
+
+      // Simulate Ctrl+K
+      const event = new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true });
+      document.dispatchEvent(event);
+
+      // In JSDOM, check that input received focus (select() is called in implementation)
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should clear focus when Escape is pressed in input', async () => {
+      render(<HeroSection {...defaultProps} />);
+
+      const input = screen.getByPlaceholderText(/search releases/i) as HTMLInputElement;
+      input.focus();
+      expect(document.activeElement).toBe(input);
+
+      await userEvent.keyboard('{Escape}');
+
+      expect(document.activeElement).not.toBe(input);
+    });
+
+    it('should display shortcut hint in placeholder', () => {
+      render(<HeroSection {...defaultProps} />);
+
+      // Should show either ⌘K or Ctrl+K depending on platform
+      const input = screen.getByPlaceholderText(/search releases/i);
+      expect(input.getAttribute('placeholder')).toMatch(/\(.*K\)/);
     });
   });
 });

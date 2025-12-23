@@ -1,4 +1,6 @@
 import { Search } from 'lucide-react';
+import { useRef, useMemo } from 'react';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 
 export interface HeroSectionProps {
   query: string;
@@ -13,6 +15,39 @@ export function HeroSection({
   onQueryChange,
   onSuggestionClick
 }: HeroSectionProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Platform detection with modern API fallback
+  const isMac = useMemo(() => {
+    if (typeof navigator === 'undefined') return false;
+    if ('userAgentData' in navigator && (navigator as Navigator & { userAgentData?: { platform: string } }).userAgentData?.platform) {
+      return /mac/i.test((navigator as Navigator & { userAgentData: { platform: string } }).userAgentData.platform);
+    }
+    return /Mac|iPhone|iPod|iPad/.test(navigator.platform || navigator.userAgent);
+  }, []);
+
+  // Shortcut hint text for placeholder
+  const shortcutHint = isMac ? '⌘K' : 'Ctrl+K';
+
+  // Cmd+K (Mac) or Ctrl+K (Windows/Linux) to focus search
+  useKeyboardShortcut({
+    onTrigger: () => {
+      inputRef.current?.focus();
+      inputRef.current?.select();
+    },
+    key: 'k',
+    metaKey: isMac,
+    ctrlKey: !isMac,
+    allowedInputId: 'release-search'
+  });
+
+  // Escape to clear focus
+  const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      inputRef.current?.blur();
+    }
+  };
+
   const handleSuggestionClick = (suggestion: string) => {
     onQueryChange(suggestion);
     onSuggestionClick?.(suggestion);
@@ -44,11 +79,13 @@ export function HeroSection({
         <div className="bg-[#1a1a19] rounded-full p-3 flex items-center border border-[#2a2a28] focus-within:border-[#d97757] focus-within:ring-2 focus-within:ring-[#d97757]/20 transition-colors">
           <Search className="w-5 h-5 text-[#b0aea5] ml-2 shrink-0" aria-hidden="true" />
           <input
+            ref={inputRef}
             id="release-search"
             type="search"
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
-            placeholder="Search releases... try 'MCP' or 'hooks'"
+            onKeyDown={handleInputKeyDown}
+            placeholder={`Search releases... (${shortcutHint})`}
             className="bg-transparent flex-1 outline-none text-[#faf9f5] pl-4 placeholder:text-[#b0aea5]/70"
             aria-describedby="search-hint"
             autoComplete="off"
