@@ -1,12 +1,8 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { SearchStatus, SearchStatusProps } from './SearchStatus';
 
 describe('SearchStatus', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   describe('Conditional Rendering', () => {
     it('should return null when query is empty string', () => {
       const { container } = render(
@@ -75,6 +71,23 @@ describe('SearchStatus', () => {
       render(<SearchStatus query="authentication" matchCount={7} releaseCount={2} />);
       expect(screen.getByText('authentication')).toBeInTheDocument();
     });
+
+    it('should render complete message format matching spec', () => {
+      const { container } = render(
+        <SearchStatus query="MCP" matchCount={12} releaseCount={3} />
+      );
+      const text = container.textContent || '';
+      expect(text).toBe('12 entries across 3 releases match "MCP"');
+    });
+
+    it('should handle very long query strings without breaking', () => {
+      const longQuery = 'a'.repeat(100);
+      const { container } = render(
+        <SearchStatus query={longQuery} matchCount={5} releaseCount={2} />
+      );
+      expect(container.firstChild).not.toBeNull();
+      expect(screen.getByText(longQuery)).toBeInTheDocument();
+    });
   });
 
   describe('Accessibility', () => {
@@ -106,14 +119,7 @@ describe('SearchStatus', () => {
       expect(container.firstChild).not.toBeNull();
     });
 
-    it('should export SearchStatusProps interface for external typing', () => {
-      // TypeScript compilation will fail if interface is not exported
-      const props: SearchStatusProps = {
-        query: 'test',
-        matchCount: 5,
-        releaseCount: 2
-      };
-      expect(props).toBeDefined();
-    });
+    // Note: SearchStatusProps interface export is validated at compile time by TypeScript.
+    // The import statement at line 3 would fail if the interface wasn't exported.
   });
 });
