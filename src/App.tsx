@@ -5,6 +5,7 @@ import { LoadingState } from "@/components/LoadingState";
 import { ErrorState } from "@/components/ErrorState";
 import { HeroSection } from "@/components/HeroSection";
 import { SearchStatus } from "@/components/SearchStatus";
+import { EmptySearch } from "@/components/EmptySearch";
 import { ReleaseSection } from "@/components/ReleaseSection";
 import type { Release } from "@/lib/types";
 
@@ -42,17 +43,21 @@ function App() {
       <div className="p-8">
         {/* Centered content wrapper with max-width constraint */}
         <div className="max-w-[720px] mx-auto">
-          {/* Release list - now uses filteredReleases - space-y-0 because ReleaseSection has py-16 internally */}
-          <div className="space-y-0">
-            {filteredReleases.map((release: Release) => (
-              <ReleaseSection
-                key={release.version}
-                version={release.version}
-                date={release.date}
-                entries={release.entries}
-              />
-            ))}
-          </div>
+          {/* Conditional: EmptySearch when no results, otherwise release list */}
+          {filteredReleases.length === 0 && query.trim() ? (
+            <EmptySearch query={query} onClear={() => setQuery('')} />
+          ) : (
+            <div className="space-y-0">
+              {filteredReleases.map((release: Release) => (
+                <ReleaseSection
+                  key={release.version}
+                  version={release.version}
+                  date={release.date}
+                  entries={release.entries}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </main>
