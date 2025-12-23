@@ -2,11 +2,21 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import * as useChangelogModule from "@/hooks/useChangelog";
 import type { Release } from "@/lib/types";
 
 // Mock the useChangelog hook module
 vi.mock("@/hooks/useChangelog");
+
+// Helper to render App with ThemeProvider
+const renderApp = () => {
+  return render(
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
+  );
+};
 
 // Test data: mock releases for success state testing
 const mockReleases: Release[] = [
@@ -44,15 +54,46 @@ const mockHook = (
 };
 
 describe("App", () => {
+  let mockLocalStorage: Record<string, string>;
+
   beforeEach(() => {
     vi.clearAllMocks();
+
+    // Mock localStorage for ThemeProvider
+    mockLocalStorage = {};
+    Object.defineProperty(window, 'localStorage', {
+      value: {
+        getItem: vi.fn((key: string) => mockLocalStorage[key] || null),
+        setItem: vi.fn((key: string, value: string) => {
+          mockLocalStorage[key] = value;
+        }),
+        removeItem: vi.fn((key: string) => {
+          delete mockLocalStorage[key];
+        }),
+        clear: vi.fn(() => {
+          mockLocalStorage = {};
+        }),
+      },
+      writable: true,
+    });
+
+    // Mock matchMedia for ThemeProvider
+    Object.defineProperty(window, 'matchMedia', {
+      value: vi.fn(() => ({
+        matches: true,
+        media: '(prefers-color-scheme: dark)',
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+      writable: true,
+    });
   });
 
   // LOADING STATE TESTS
   describe("Loading State", () => {
     it("renders LoadingState component when isLoading is true", () => {
       mockHook({ isLoading: true });
-      render(<App />);
+      renderApp();
 
       // LoadingState should have role="status" for accessibility
       expect(screen.getByRole("status")).toBeInTheDocument();
@@ -60,7 +101,7 @@ describe("App", () => {
 
     it("does not render main element during loading", () => {
       mockHook({ isLoading: true });
-      render(<App />);
+      renderApp();
 
       // Main content should not be present during loading
       expect(screen.queryByRole("main")).not.toBeInTheDocument();
@@ -72,7 +113,7 @@ describe("App", () => {
     it("renders ErrorState component when error exists", () => {
       const mockError = new Error("Network failed");
       mockHook({ error: mockError });
-      render(<App />);
+      renderApp();
 
       // ErrorState should have role="alert" for accessibility
       expect(screen.getByRole("alert")).toBeInTheDocument();
@@ -83,7 +124,7 @@ describe("App", () => {
       const mockError = new Error("Network failed");
       mockHook({ error: mockError, retry: mockRetry });
 
-      render(<App />);
+      renderApp();
 
       // Find and click the retry button
       const retryButton = screen.getByRole("button", { name: /try.*again/i });
@@ -95,7 +136,7 @@ describe("App", () => {
 
     it("does not render main element during error", () => {
       mockHook({ error: new Error("Test error") });
-      render(<App />);
+      renderApp();
 
       // Main content should not be present during error
       expect(screen.queryByRole("main")).not.toBeInTheDocument();
@@ -106,14 +147,14 @@ describe("App", () => {
   describe("Success State", () => {
     it("renders main landmark when releases are loaded", () => {
       mockHook({ releases: mockReleases });
-      render(<App />);
+      renderApp();
 
       expect(screen.getByRole("main")).toBeInTheDocument();
     });
 
     it("renders h1 heading with app title", () => {
       mockHook({ releases: mockReleases });
-      render(<App />);
+      renderApp();
 
       const heading = screen.getByRole("heading", { level: 1 });
       expect(heading).toBeInTheDocument();
@@ -122,7 +163,7 @@ describe("App", () => {
 
     it("renders all releases in the list", () => {
       mockHook({ releases: mockReleases });
-      const { container } = render(<App />);
+      const { container } = renderApp();
 
       // Check that both release versions are present via h2 elements
       const headings = container.querySelectorAll("h2");
@@ -137,7 +178,7 @@ describe("App", () => {
 
     it("renders releases in correct order (newest first)", () => {
       mockHook({ releases: mockReleases });
-      const { container } = render(<App />);
+      const { container } = renderApp();
 
       // Get all h2 elements and find version headings
       const headings = container.querySelectorAll("h2");
@@ -154,7 +195,7 @@ describe("App", () => {
 
     it("renders all release entries with correct content", () => {
       mockHook({ releases: mockReleases });
-      render(<App />);
+      renderApp();
 
       // Check that entry content is rendered
       expect(screen.getByText(/Added new feature X/i)).toBeInTheDocument();
@@ -166,7 +207,7 @@ describe("App", () => {
 
     it("applies max-width constraint for centered layout", () => {
       mockHook({ releases: mockReleases });
-      const { container } = render(<App />);
+      const { container } = renderApp();
 
       // Find element with max-w-[720px] class
       const centeredContainer = container.querySelector(".max-w-\\[720px\\]");
@@ -175,21 +216,21 @@ describe("App", () => {
 
     it("does not render loading state in success", () => {
       mockHook({ releases: mockReleases });
-      render(<App />);
+      renderApp();
 
       expect(screen.queryByRole("status")).not.toBeInTheDocument();
     });
 
     it("does not render error state in success", () => {
       mockHook({ releases: mockReleases });
-      render(<App />);
+      renderApp();
 
       expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     });
 
     it("supports keyboard navigation through content", () => {
       mockHook({ releases: mockReleases });
-      const { container } = render(<App />);
+      const { container } = renderApp();
 
       // Verify main content is in the document
       const main = screen.getByRole("main");
@@ -214,7 +255,7 @@ describe("App", () => {
   describe("Edge Cases", () => {
     it("handles empty releases array gracefully", () => {
       mockHook({ releases: [] });
-      const { container } = render(<App />);
+      const { container } = renderApp();
 
       // Main element should still render
       expect(screen.getByRole("main")).toBeInTheDocument();
@@ -232,12 +273,16 @@ describe("App", () => {
     it("transitions from loading to success", () => {
       // Initial render with loading state
       mockHook({ isLoading: true });
-      const { rerender } = render(<App />);
+      const { rerender } = renderApp();
       expect(screen.getByRole("status")).toBeInTheDocument();
 
       // Simulate successful data fetch
       mockHook({ releases: mockReleases });
-      rerender(<App />);
+      rerender(
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      );
 
       // Should now show main content
       expect(screen.queryByRole("status")).not.toBeInTheDocument();
@@ -247,12 +292,16 @@ describe("App", () => {
     it("transitions from loading to error", () => {
       // Initial render with loading state
       mockHook({ isLoading: true });
-      const { rerender } = render(<App />);
+      const { rerender } = renderApp();
       expect(screen.getByRole("status")).toBeInTheDocument();
 
       // Simulate fetch error
       mockHook({ error: new Error("Network failed") });
-      rerender(<App />);
+      rerender(
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      );
 
       // Should now show error state
       expect(screen.queryByRole("status")).not.toBeInTheDocument();

@@ -7,6 +7,7 @@ import { HeroSection } from "@/components/HeroSection";
 import { SearchStatus } from "@/components/SearchStatus";
 import { EmptySearch } from "@/components/EmptySearch";
 import { ReleaseSection } from "@/components/ReleaseSection";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import type { Release } from "@/lib/types";
 
 function App() {
@@ -26,6 +27,11 @@ function App() {
   // Success state: render all releases
   return (
     <main className="min-h-screen bg-background text-foreground">
+      {/* ThemeToggle in top-right corner */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+
       {/* HeroSection OUTSIDE centered wrapper - full width */}
       <HeroSection
         query={query}
