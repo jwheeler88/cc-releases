@@ -62,14 +62,30 @@ describe('ThemeToggle', () => {
   describe('Icon rendering', () => {
     it('renders Sun icon when theme is dark', () => {
       renderWithTheme('dark');
-      expect(screen.getByTestId('sun-icon')).toBeInTheDocument();
+      const sunIcon = screen.getByTestId('sun-icon');
+      expect(sunIcon).toBeInTheDocument();
+      expect(sunIcon.tagName).toBe('svg');
       expect(screen.queryByTestId('moon-icon')).not.toBeInTheDocument();
     });
 
     it('renders Moon icon when theme is light', () => {
       renderWithTheme('light');
-      expect(screen.getByTestId('moon-icon')).toBeInTheDocument();
+      const moonIcon = screen.getByTestId('moon-icon');
+      expect(moonIcon).toBeInTheDocument();
+      expect(moonIcon.tagName).toBe('svg');
       expect(screen.queryByTestId('sun-icon')).not.toBeInTheDocument();
+    });
+
+    it('verifies Sun icon has correct lucide-react structure', () => {
+      renderWithTheme('dark');
+      const sunIcon = screen.getByTestId('sun-icon');
+      expect(sunIcon).toHaveClass('h-5', 'w-5');
+    });
+
+    it('verifies Moon icon has correct lucide-react structure', () => {
+      renderWithTheme('light');
+      const moonIcon = screen.getByTestId('moon-icon');
+      expect(moonIcon).toHaveClass('h-5', 'w-5');
     });
   });
 
@@ -144,6 +160,19 @@ describe('ThemeToggle', () => {
       renderWithTheme('dark');
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('data-size', 'icon');
+    });
+
+    it('has hover state classes', () => {
+      renderWithTheme('dark');
+      const button = screen.getByRole('button');
+      expect(button.className).toContain('hover:text-[#faf9f5]');
+      expect(button.className).toContain('hover:bg-[#1a1a19]');
+    });
+
+    it('has focus ring with UX-specified color', () => {
+      renderWithTheme('dark');
+      const button = screen.getByRole('button');
+      expect(button.className).toContain('focus-visible:ring-[#d97757]');
     });
   });
 });

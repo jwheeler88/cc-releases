@@ -249,6 +249,27 @@ describe("App", () => {
         expect(heading).toBeVisible();
       });
     });
+
+    it("renders ThemeToggle component integrated in layout", () => {
+      mockHook({ releases: mockReleases });
+      renderApp();
+
+      // ThemeToggle should be rendered as a button with aria-label
+      const themeToggle = screen.getByRole("button", {
+        name: /switch to (light|dark) mode/i,
+      });
+      expect(themeToggle).toBeInTheDocument();
+    });
+
+    it("ThemeToggle is positioned in fixed top-right corner", () => {
+      mockHook({ releases: mockReleases });
+      const { container } = renderApp();
+
+      // Find the wrapper div with fixed positioning
+      const fixedWrapper = container.querySelector(".fixed");
+      expect(fixedWrapper).toBeInTheDocument();
+      expect(fixedWrapper).toHaveClass("z-50");
+    });
   });
 
   // EDGE CASE TESTS
