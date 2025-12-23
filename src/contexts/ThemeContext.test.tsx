@@ -2,23 +2,6 @@ import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest';
 import { render, screen, renderHook, act, cleanup } from '@testing-library/react';
 import { ThemeProvider, useTheme } from './ThemeContext';
 
-// Mock localStorage
-const mockLocalStorage = (() => {
-  let store: Record<string, string> = {};
-  return {
-    getItem: vi.fn((key: string) => store[key] || null),
-    setItem: vi.fn((key: string, value: string) => {
-      store[key] = value;
-    }),
-    removeItem: vi.fn((key: string) => {
-      delete store[key];
-    }),
-    clear: vi.fn(() => {
-      store = {};
-    }),
-  };
-})();
-
 // Mock matchMedia factory
 const mockMatchMedia = (matches: boolean) =>
   vi.fn(() => ({
@@ -29,19 +12,28 @@ const mockMatchMedia = (matches: boolean) =>
   }));
 
 describe('ThemeContext', () => {
+  let mockLocalStorage: {
+    getItem: ReturnType<typeof vi.fn>;
+    setItem: ReturnType<typeof vi.fn>;
+    removeItem: ReturnType<typeof vi.fn>;
+    clear: ReturnType<typeof vi.fn>;
+  };
+
   beforeEach(() => {
-    // Reset mock implementations to original behavior
+    // Create fresh mock localStorage for each test
     let store: Record<string, string> = {};
-    mockLocalStorage.getItem.mockImplementation((key: string) => store[key] || null);
-    mockLocalStorage.setItem.mockImplementation((key: string, value: string) => {
-      store[key] = value;
-    });
-    mockLocalStorage.removeItem.mockImplementation((key: string) => {
-      delete store[key];
-    });
-    mockLocalStorage.clear.mockImplementation(() => {
-      store = {};
-    });
+    mockLocalStorage = {
+      getItem: vi.fn((key: string) => store[key] || null),
+      setItem: vi.fn((key: string, value: string) => {
+        store[key] = value;
+      }),
+      removeItem: vi.fn((key: string) => {
+        delete store[key];
+      }),
+      clear: vi.fn(() => {
+        store = {};
+      }),
+    };
 
     // Apply mocks before each test
     Object.defineProperty(window, 'localStorage', {
@@ -54,7 +46,6 @@ describe('ThemeContext', () => {
       writable: true,
       configurable: true,
     });
-    mockLocalStorage.clear();
     vi.clearAllMocks();
   });
 
@@ -422,8 +413,35 @@ describe('ThemeContext', () => {
         wrapper: ThemeProvider,
       });
 
-      // Should fall back to system preference or dark
-      expect(['light', 'dark']).toContain(result.current.theme);
+      // Should verify localStorage was accessed
+      expect(mockLocalStorage.getItem).toHaveBeenCalledWith('cc-releases-theme');
+
+      // Should verify invalid value was removed
+      expect(mockLocalStorage.removeItem).toHaveBeenCalledWith('cc-releases-theme');
+
+      // Should fall back to system preference (dark by default in mock)
+      expect(result.current.theme).toBe('dark');
+    });
+
+    it('should handle SSR environment (no window object)', () => {
+      // Simulate SSR by making localStorage fail
+      mockLocalStorage.getItem.mockImplementation(() => {
+        throw new Error('window is not defined');
+      });
+
+      // Should not crash in SSR-like environment
+      expect(() => {
+        renderHook(() => useTheme(), {
+          wrapper: ThemeProvider,
+        });
+      }).not.toThrow();
+
+      const { result } = renderHook(() => useTheme(), {
+        wrapper: ThemeProvider,
+      });
+
+      // Should fall back to dark theme
+      expect(result.current.theme).toBe('dark');
     });
   });
 });

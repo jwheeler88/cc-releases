@@ -14,13 +14,20 @@ export interface ThemeProviderProps {
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
+// localStorage key for theme persistence
+const THEME_STORAGE_KEY = 'cc-releases-theme';
+
 // Helper: Safely read theme from localStorage
 // Returns: Theme if valid value found, null otherwise
 function getStoredTheme(): Theme | null {
   try {
-    const stored = localStorage.getItem('cc-releases-theme');
+    const stored = localStorage.getItem(THEME_STORAGE_KEY);
     if (stored === 'light' || stored === 'dark') {
       return stored;
+    }
+    // Clear invalid values to prevent pollution
+    if (stored !== null) {
+      localStorage.removeItem(THEME_STORAGE_KEY);
     }
     return null;
   } catch {
@@ -35,7 +42,7 @@ function getSystemPreference(): Theme {
   if (typeof window === 'undefined') return 'dark'; // SSR fallback
   if (!window.matchMedia) return 'dark'; // Browser compatibility fallback
 
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)')?.matches ?? false;
   return isDark ? 'dark' : 'light';
 }
 
@@ -60,10 +67,11 @@ export function ThemeProvider({ children, defaultTheme }: ThemeProviderProps) {
   // Persist theme to localStorage whenever it changes
   useEffect(() => {
     try {
-      localStorage.setItem('cc-releases-theme', theme);
-    } catch {
-      // Silently fail if localStorage unavailable
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch (error) {
+      // Warn developer if localStorage unavailable
       // User preference won't persist, but app continues working
+      console.warn('Theme persistence failed:', error);
     }
   }, [theme]);
 
