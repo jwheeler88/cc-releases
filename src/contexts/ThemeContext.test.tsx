@@ -131,5 +131,38 @@ describe('ThemeContext', () => {
       const elements = screen.getAllByText(/Theme: dark/i);
       expect(elements).toHaveLength(2);
     });
+
+    it('should propagate theme changes to all consumers', () => {
+      const ThemeChanger = () => {
+        const { setTheme } = useTheme();
+        return <button onClick={() => setTheme('light')}>Change Theme</button>;
+      };
+
+      const ThemeDisplay = ({ testId }: { testId: string }) => {
+        const { theme } = useTheme();
+        return <div data-testid={testId}>Theme: {theme}</div>;
+      };
+
+      render(
+        <ThemeProvider>
+          <ThemeChanger />
+          <ThemeDisplay testId="consumer-1" />
+          <ThemeDisplay testId="consumer-2" />
+        </ThemeProvider>
+      );
+
+      // Verify initial state
+      expect(screen.getByTestId('consumer-1')).toHaveTextContent('Theme: dark');
+      expect(screen.getByTestId('consumer-2')).toHaveTextContent('Theme: dark');
+
+      // Change theme from one component
+      act(() => {
+        screen.getByRole('button').click();
+      });
+
+      // Verify both consumers updated
+      expect(screen.getByTestId('consumer-1')).toHaveTextContent('Theme: light');
+      expect(screen.getByTestId('consumer-2')).toHaveTextContent('Theme: light');
+    });
   });
 });
