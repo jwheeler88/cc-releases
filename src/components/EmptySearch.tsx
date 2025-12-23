@@ -28,8 +28,8 @@ export function EmptySearch({ query, onClear }: EmptySearchProps) {
 
       {/* Clear search link */}
       <button
-        onClick={() => onClear()}
-        className="text-base font-[Lora] text-[#d97757] hover:underline transition-colors"
+        onClick={onClear}
+        className="text-base font-[Lora] text-[#d97757] hover:underline transition-colors focus:outline-none focus:ring-2 focus:ring-[#d97757] focus:ring-offset-2 focus:ring-offset-[#141413] rounded"
       >
         Clear search
       </button>

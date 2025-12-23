@@ -6,6 +6,10 @@ import type { EmptySearchProps } from './EmptySearch';
 describe('EmptySearch', () => {
   const mockOnClear = vi.fn();
 
+  beforeEach(() => {
+    mockOnClear.mockClear();
+  });
+
   // Conditional Rendering Tests
   describe('Conditional Rendering', () => {
     it('should return null when query is empty string', () => {
@@ -68,12 +72,13 @@ describe('EmptySearch', () => {
       expect(onClearMock).toHaveBeenCalledOnce();
     });
 
-    it('should call onClear callback with no arguments', () => {
+    it('should call onClear callback exactly once per click', () => {
       const onClearMock = vi.fn();
       render(<EmptySearch query="test" onClear={onClearMock} />);
       const clearButton = screen.getByText(/Clear search/i);
       fireEvent.click(clearButton);
-      expect(onClearMock).toHaveBeenCalledWith();
+      fireEvent.click(clearButton);
+      expect(onClearMock).toHaveBeenCalledTimes(2);
     });
   });
 
