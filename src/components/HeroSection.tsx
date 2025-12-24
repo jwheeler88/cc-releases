@@ -76,7 +76,7 @@ export function HeroSection({
         <label htmlFor="release-search" className="sr-only">
           Search releases
         </label>
-        <div className="bg-[#1a1a19] rounded-full p-3 flex items-center border border-[#2a2a28] focus-within:border-[#d97757] focus-within:ring-2 focus-within:ring-[#d97757]/20 transition-colors">
+        <div className="bg-white dark:bg-[#1a1a19] rounded-full p-4 flex items-center border border-[#e8e6dc] dark:border-[#2a2a28] focus-within:border-[#d97757] focus-within:ring-2 focus-within:ring-[#d97757]/20 transition-colors">
           <Search className="w-5 h-5 text-[#b0aea5] ml-2 shrink-0" aria-hidden="true" />
           <input
             ref={inputRef}
@@ -86,7 +86,7 @@ export function HeroSection({
             onChange={(e) => onQueryChange(e.target.value)}
             onKeyDown={handleInputKeyDown}
             placeholder={`Search releases... (${shortcutHint})`}
-            className="bg-transparent flex-1 outline-none text-[#faf9f5] pl-4 placeholder:text-[#b0aea5]/70"
+            className="bg-transparent flex-1 outline-none text-[#141413] dark:text-[#faf9f5] pl-4 placeholder:text-[#b0aea5]/70"
             aria-describedby="search-hint"
             autoComplete="off"
           />
@@ -103,7 +103,7 @@ export function HeroSection({
             key={suggestion}
             type="button"
             onClick={() => handleSuggestionClick(suggestion)}
-            className="bg-[#1a1a19] hover:bg-[#2a2a28] rounded-full px-4 py-2 text-sm text-[#b0aea5] hover:text-[#faf9f5] transition-colors focus:outline-none focus:ring-2 focus:ring-[#d97757] focus:ring-offset-2 focus:ring-offset-[#141413]"
+            className="bg-[#e8e6dc] dark:bg-[#1a1a19] hover:bg-[#d1cfc5] dark:hover:bg-[#2a2a28] rounded-full px-4 py-4 text-sm text-[#b0aea5] hover:text-[#141413] dark:hover:text-[#faf9f5] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d97757] focus-visible:ring-offset-2"
           >
             {suggestion}
           </button>

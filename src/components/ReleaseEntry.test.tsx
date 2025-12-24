@@ -60,11 +60,11 @@ describe("ReleaseEntry", () => {
 
     const wrapper = container.firstChild as HTMLElement;
     expect(wrapper.className).toContain("pl-4");
-    expect(wrapper.className).toContain("py-2");
+    expect(wrapper.className).toContain("py-4");
 
     const contentDiv = container.querySelector(".flex-1") as HTMLElement;
     expect(contentDiv.className).toContain("text-[17px]");
-    expect(contentDiv.className).toContain("font-[Lora]");
+    expect(contentDiv.className).toContain("font-body");
     expect(contentDiv.className).toContain("text-[#faf9f5]");
     expect(contentDiv.className).toContain("leading-relaxed");
     expect(contentDiv.className).toContain("rounded-r");

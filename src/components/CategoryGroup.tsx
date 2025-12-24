@@ -57,7 +57,7 @@ export function CategoryGroup({
     >
       <h3
         id={headingId}
-        className="text-lg font-semibold font-[Poppins] mb-4 pb-2"
+        className="text-lg font-semibold font-heading mb-4 pb-2"
         style={{
           color,
           borderBottom: `2px solid ${color}`,
@@ -65,7 +65,7 @@ export function CategoryGroup({
       >
         {label}
       </h3>
-      <div className="space-y-3">{children}</div>
+      <div className="space-y-4">{children}</div>
     </section>
   );
 }

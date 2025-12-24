@@ -17,7 +17,7 @@ function SkeletonEntry() {
 /** Skeleton category group with header and entries */
 function SkeletonCategoryGroup({ entryCount = 3 }: { entryCount?: number }) {
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <Skeleton className="h-5 w-32 mb-4 bg-[#b0aea5]/20" />
       {Array.from({ length: entryCount }, (_, i) => (
         <SkeletonEntry key={`entry-${i}`} />

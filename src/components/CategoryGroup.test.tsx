@@ -107,7 +107,7 @@ describe("CategoryGroup", () => {
       const header = screen.getByRole("heading", { level: 3 });
       expect(header).toHaveClass("text-lg");
       expect(header).toHaveClass("font-semibold");
-      expect(header).toHaveClass("font-[Poppins]");
+      expect(header).toHaveClass("font-heading");
     });
 
     it("should apply correct spacing classes", () => {
@@ -124,7 +124,7 @@ describe("CategoryGroup", () => {
       expect(section).toHaveClass("mb-8");
       expect(header).toHaveClass("pb-2");
       expect(header).toHaveClass("mb-4");
-      expect(childrenContainer).toHaveClass("space-y-3");
+      expect(childrenContainer).toHaveClass("space-y-4");
     });
 
     it("should apply children container vertical spacing", () => {
@@ -137,7 +137,7 @@ describe("CategoryGroup", () => {
 
       const header = screen.getByRole("heading", { level: 3 });
       const childrenContainer = header.nextElementSibling as HTMLElement;
-      expect(childrenContainer).toHaveClass("space-y-3");
+      expect(childrenContainer).toHaveClass("space-y-4");
     });
 
     it("should apply CVA base classes correctly", () => {

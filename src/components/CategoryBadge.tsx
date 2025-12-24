@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const categoryBadgeVariants = cva(
-  "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border font-heading",
+  "inline-flex items-center rounded-full px-3 py-1 text-xs font-medium border font-heading",
 );
 
 interface CategoryBadgeProps

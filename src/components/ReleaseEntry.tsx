@@ -43,19 +43,19 @@ export function ReleaseEntry({ category, content }: ReleaseEntryProps) {
 
   return (
     <div
-      className="flex items-start gap-3 pl-4 py-2"
+      className="flex items-start gap-4 pl-4 py-4"
       style={{ borderLeft: `2px solid ${color}` }}
     >
       {/* Badge - fixed width, no shrink */}
-      <CategoryBadge category={category} className="shrink-0 mt-0.5" />
+      <CategoryBadge category={category} className="shrink-0 mt-2" />
 
       {/* Content - flexible width with markdown */}
       <div
         className={cn(
           // Base layout and typography
-          "flex-1 text-[17px] font-[Lora] text-[#faf9f5] leading-relaxed",
+          "flex-1 text-[17px] font-body text-[#141413] dark:text-[#faf9f5] leading-relaxed",
           // Hover states
-          "hover:bg-[#1a1a19] transition-colors rounded-r",
+          "hover:bg-[#e8e6dc] dark:hover:bg-[#1a1a19] transition-colors rounded-r",
           // Inline code styling
           "[&_code]:bg-[#2a2a28] [&_code]:px-1.5 [&_code]:py-0.5",
           "[&_code]:rounded [&_code]:text-[15px] [&_code]:font-mono",

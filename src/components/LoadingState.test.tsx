@@ -84,9 +84,9 @@ describe("LoadingState", () => {
     const { container } = render(<LoadingState />);
     const articles = container.querySelectorAll("article");
 
-    // Each article should have multiple .space-y-3 divs (category groups)
+    // Each article should have multiple .space-y-4 divs (category groups)
     const firstArticle = articles[0];
-    const categoryGroups = firstArticle?.querySelectorAll(".space-y-3");
+    const categoryGroups = firstArticle?.querySelectorAll(".space-y-4");
 
     expect(categoryGroups.length).toBeGreaterThanOrEqual(2);
   });

@@ -18,10 +18,10 @@ export function SearchStatus({ query, matchCount, releaseCount }: SearchStatusPr
     <div
       aria-live="polite"
       aria-atomic="true"
-      className="text-sm text-[#b0aea5] font-[Lora] text-center py-4"
+      className="text-sm text-[#b0aea5] dark:text-[#b0aea5] font-body text-center py-4"
     >
-      <span className="text-[#faf9f5] font-medium">{matchCount}</span> {entryLabel} across{" "}
-      <span className="text-[#faf9f5] font-medium">{releaseCount}</span> {releaseLabel} match{" "}
+      <span className="text-[#141413] dark:text-[#faf9f5] font-medium">{matchCount}</span> {entryLabel} across{" "}
+      <span className="text-[#141413] dark:text-[#faf9f5] font-medium">{releaseCount}</span> {releaseLabel} match{" "}
       "<span className="text-[#d97757]">{query}</span>"
     </div>
   );
