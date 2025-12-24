@@ -58,7 +58,7 @@ export function ReleaseSection({
       {/* Sticky version/date sidebar (desktop only) */}
       <div className="md:sticky top-8 h-fit w-48 shrink-0">
         {/* Version header */}
-        <h2 className="text-[28px] md:text-[36px] font-heading font-semibold text-[#faf9f5] mb-2">
+        <h2 className="text-[28px] md:text-[36px] font-heading font-semibold text-[#141413] dark:text-[#faf9f5] mb-2">
           {version}
         </h2>
 

@@ -43,13 +43,16 @@ describe("ReleaseEntry", () => {
     });
   });
 
-  it("should have exact hover and transition classes", () => {
+  it("should have exact hover and transition classes for both themes", () => {
     const { container } = render(
       <ReleaseEntry category="features" content="Content" />,
     );
 
     const contentDiv = container.querySelector(".flex-1") as HTMLElement;
-    expect(contentDiv.className).toContain("hover:bg-[#1a1a19]");
+    // Light theme hover
+    expect(contentDiv.className).toContain("hover:bg-[#e8e6dc]");
+    // Dark theme hover
+    expect(contentDiv.className).toContain("dark:hover:bg-[#1a1a19]");
     expect(contentDiv.className).toContain("transition-colors");
   });
 
@@ -65,7 +68,9 @@ describe("ReleaseEntry", () => {
     const contentDiv = container.querySelector(".flex-1") as HTMLElement;
     expect(contentDiv.className).toContain("text-[17px]");
     expect(contentDiv.className).toContain("font-body");
-    expect(contentDiv.className).toContain("text-[#faf9f5]");
+    // Theme-aware text colors (light and dark)
+    expect(contentDiv.className).toContain("text-[#141413]");
+    expect(contentDiv.className).toContain("dark:text-[#faf9f5]");
     expect(contentDiv.className).toContain("leading-relaxed");
     expect(contentDiv.className).toContain("rounded-r");
   });
@@ -112,8 +117,9 @@ describe("ReleaseEntry - Markdown Rendering", () => {
     );
 
     const contentDiv = container.querySelector(".flex-1") as HTMLElement;
-    // Verify Tailwind arbitrary selectors for code styling
-    expect(contentDiv.className).toContain("[&_code]:bg-[#2a2a28]");
+    // Verify Tailwind arbitrary selectors for code styling (theme-aware)
+    expect(contentDiv.className).toContain("[&_code]:bg-[#e8e6dc]");
+    expect(contentDiv.className).toContain("dark:[&_code]:bg-[#2a2a28]");
     expect(contentDiv.className).toContain("[&_code]:px-1.5");
     expect(contentDiv.className).toContain("[&_code]:py-0.5");
     expect(contentDiv.className).toContain("[&_code]:rounded");

@@ -56,8 +56,8 @@ export function ReleaseEntry({ category, content }: ReleaseEntryProps) {
           "flex-1 text-[17px] font-body text-[#141413] dark:text-[#faf9f5] leading-relaxed",
           // Hover states
           "hover:bg-[#e8e6dc] dark:hover:bg-[#1a1a19] transition-colors rounded-r",
-          // Inline code styling
-          "[&_code]:bg-[#2a2a28] [&_code]:px-1.5 [&_code]:py-0.5",
+          // Inline code styling (theme-aware)
+          "[&_code]:bg-[#e8e6dc] dark:[&_code]:bg-[#2a2a28] [&_code]:px-1.5 [&_code]:py-0.5",
           "[&_code]:rounded [&_code]:text-[15px] [&_code]:font-mono",
           // Link styling
           "[&_a]:text-[#6a9bcc] [&_a:hover]:text-[#8bb4d9] [&_a]:underline",
