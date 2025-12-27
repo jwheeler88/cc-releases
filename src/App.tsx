@@ -41,11 +41,6 @@ function App() {
         }}
       />
 
-      {/* ThemeToggle in top-right corner - z-50 ensures it stays above content but below modals (z-50 is standard for fixed UI elements) */}
-      <div className="fixed top-2 right-2 sm:top-4 sm:right-4 z-50">
-        <ThemeToggle />
-      </div>
-
       {/* HeroSection OUTSIDE centered wrapper - full width */}
       <HeroSection
         query={query}

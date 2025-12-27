@@ -1,6 +1,7 @@
 import { Search, Sparkles } from 'lucide-react';
 import { useRef, useMemo } from 'react';
 import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
+import { ThemeToggle } from './ThemeToggle';
 
 export interface HeroSectionProps {
   query: string;
@@ -58,6 +59,11 @@ export function HeroSection({
       className="min-h-[40vh] bg-[#e8e6dc] dark:bg-gradient-to-b dark:from-[#141413] dark:via-[#141413] dark:to-[#1a1a18] flex flex-col items-center justify-center px-4 relative overflow-hidden"
       aria-labelledby="hero-title"
     >
+      {/* ThemeToggle in top-right corner - absolute positioned within hero */}
+      <div className="absolute top-2 right-2 sm:top-4 sm:right-4 z-50">
+        <ThemeToggle />
+      </div>
+
       {/* Subtle radial glow behind title */}
       <div
         className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(217,119,87,0.08)_0%,_transparent_70%)]"
