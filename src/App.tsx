@@ -7,7 +7,6 @@ import { HeroSection } from "@/components/HeroSection";
 import { SearchStatus } from "@/components/SearchStatus";
 import { EmptySearch } from "@/components/EmptySearch";
 import { ReleaseSection } from "@/components/ReleaseSection";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import type { Release } from "@/lib/types";
 import { Toaster } from "sonner";
 
