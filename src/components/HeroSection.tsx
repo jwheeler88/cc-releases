@@ -70,6 +70,96 @@ export function HeroSection({
         aria-hidden="true"
       />
 
+      {/* Abstract floating shapes - Dot grid pattern */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        {/* Evenly spaced dots - top and bottom rows */}
+        {/* Top row */}
+        {[3, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47, 51, 55, 59, 63, 67, 71, 75, 79, 83, 87, 91, 95].map((left) => (
+          <div
+            key={`dot-top-${left}`}
+            className="absolute w-1 h-1 rounded-full bg-[#9b8bb0] opacity-60"
+            style={{ top: '8%', left: `${left}%` }}
+          />
+        ))}
+
+        {/* Bottom row */}
+        {[3, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47, 51, 55, 59, 63, 67, 71, 75, 79, 83, 87, 91, 95].map((left) => (
+          <div
+            key={`dot-bottom-${left}`}
+            className="absolute w-1 h-1 rounded-full bg-[#9b8bb0] opacity-60"
+            style={{ bottom: '8%', left: `${left}%` }}
+          />
+        ))}
+
+        {/* Floating organic blobs */}
+
+        {/* Blob 1 - upper left */}
+        <div
+          className="absolute bg-[#9b8bb0] opacity-20 dark:opacity-15"
+          style={{
+            top: '8%',
+            left: '5%',
+            width: '200px',
+            height: '200px',
+            borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
+            animation: 'morphBlob 15s infinite alternate, floatBlob 20s infinite ease-in-out'
+          }}
+        />
+
+        {/* Blob 1b - bottom right of purple blob */}
+        <div
+          className="absolute bg-[#d97757] opacity-18 dark:opacity-12"
+          style={{
+            top: '23%',
+            left: '16%',
+            width: '140px',
+            height: '140px',
+            borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
+            animation: 'morphBlob 13s infinite alternate, floatBlob 19s infinite ease-in-out 2s'
+          }}
+        />
+
+        {/* Blob 2 - upper right */}
+        <div
+          className="absolute bg-[#d97757] opacity-20 dark:opacity-15"
+          style={{
+            top: '12%',
+            right: '8%',
+            width: '160px',
+            height: '160px',
+            borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
+            animation: 'morphBlob 14s infinite alternate, floatBlob 18s infinite ease-in-out 3s'
+          }}
+        />
+
+        {/* Blob 3 - bottom right */}
+        <div
+          className="absolute bg-[#6a9bcc] opacity-20 dark:opacity-15"
+          style={{
+            bottom: '10%',
+            right: '6%',
+            width: '220px',
+            height: '220px',
+            borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
+            animation: 'morphBlob 16s infinite alternate, floatBlob 22s infinite ease-in-out 6s'
+          }}
+        />
+
+        {/* Blob 4 - center (subtle) */}
+        <div
+          className="absolute bg-[#788c5d] opacity-15 dark:opacity-10"
+          style={{
+            top: '45%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '280px',
+            height: '280px',
+            borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
+            animation: 'morphBlob 17s infinite alternate, floatBlob 25s infinite ease-in-out 9s'
+          }}
+        />
+      </div>
+
       {/* Content with relative positioning */}
       <div className="relative z-10 flex flex-col items-center">
         {/* Title - Space Grotesk display font */}
