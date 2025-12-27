@@ -1,4 +1,24 @@
-# React + TypeScript + Vite
+# CC Releases - Claude Code Release Tracker
+
+A React + TypeScript + Vite SPA for tracking Claude Code releases.
+
+## Deployment
+
+This project is deployed on Vercel at [cc-releases.vercel.app](https://cc-releases.vercel.app)
+
+### Initial Vercel Setup (One-time)
+
+1. Sign in to [Vercel](https://vercel.com) with your GitHub account
+2. Import the `jwheeler88/cc-releases` repository
+3. Vercel will auto-detect settings:
+   - Framework Preset: Vite
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+   - Install Command: `npm install`
+4. Click "Deploy"
+5. Future pushes to `main` will auto-deploy
+
+## Development
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
