@@ -60,9 +60,9 @@ function App() {
       />
 
       {/* Page container with padding */}
-      <div className="px-4 py-8 md:p-8">
+      <div className="px-4 py-8 md:p-8 w-full">
         {/* Centered content wrapper with max-width constraint */}
-        <div className="max-w-[720px] mx-auto">
+        <div className="w-full max-w-[720px] mx-auto">
           {/* Conditional: EmptySearch when no results, otherwise release list */}
           {filteredReleases.length === 0 && query.trim() ? (
             <EmptySearch query={query} onClear={() => setQuery('')} />

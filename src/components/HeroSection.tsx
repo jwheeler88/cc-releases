@@ -84,7 +84,7 @@ export function HeroSection({
       </p>
 
       {/* Search input container */}
-      <div className="relative max-w-xl w-full">
+      <div className="relative w-full max-w-xl">
         <label htmlFor="release-search" className="sr-only">
           Search releases
         </label>
