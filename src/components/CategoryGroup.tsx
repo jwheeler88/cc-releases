@@ -63,7 +63,7 @@ export function CategoryGroup({
           borderBottom: `2px solid ${color}`,
         }}
       >
-        {label}
+        • {label}
       </h3>
       <div className="space-y-4">{children}</div>
     </section>
