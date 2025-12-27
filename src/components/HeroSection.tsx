@@ -8,7 +8,7 @@ export interface HeroSectionProps {
   onSuggestionClick?: (suggestion: string) => void;
 }
 
-const SUGGESTIONS = ['MCP', 'hooks', 'performance'];
+const SUGGESTIONS = ['skill', 'agent', 'mcp', 'tool'];
 
 export function HeroSection({
   query,
@@ -85,7 +85,7 @@ export function HeroSection({
         <label htmlFor="release-search" className="sr-only">
           Search releases
         </label>
-        <div className="bg-white dark:bg-[#1a1a19] rounded-full p-4 flex items-center border border-[#e8e6dc] dark:border-[#2a2a28] focus-within:border-[#d97757] focus-within:ring-2 focus-within:ring-[#d97757]/20 transition-colors">
+        <div className="bg-white dark:bg-[#1a1a19] rounded-full p-4 flex items-center border border-[#e8e6dc] dark:border-[#2a2a28] focus-within:border-[#d97757] focus-within:ring-2 focus-within:ring-[#d97757]/85 transition-colors">
           <Search className="w-5 h-5 text-[#b0aea5] ml-2 shrink-0" aria-hidden="true" />
           <input
             ref={inputRef}

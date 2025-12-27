@@ -1,12 +1,12 @@
 export const CATEGORIES = {
   bugfixes: {
     label: 'Bug Fixes',
-    color: '#788c5d',
+    color: '#d97757',
     keywords: ['fix', 'bug', 'resolve', 'patch'],
   },
   performance: {
     label: 'Performance',
-    color: '#d97757',
+    color: '#6a9bcc',
     keywords: ['perf', 'fast', 'speed', 'optimize', 'reduce', 'reduced'],
   },
   devx: {
@@ -16,7 +16,7 @@ export const CATEGORIES = {
   },
   features: {
     label: 'Features',
-    color: '#6a9bcc',
+    color: '#788c5d',
     keywords: ['add', 'new', 'feature', 'support'],
   },
 } as const;
