@@ -81,10 +81,9 @@ describe("ReleaseSection", () => {
     );
 
     const version = container.querySelector("h2");
-    expect(version?.className).toContain("text-[28px]");
-    expect(version?.className).toContain("md:text-[36px]");
+    expect(version?.className).toContain("text-[32px]");
+    expect(version?.className).toContain("md:text-[42px]");
     expect(version?.className).toContain("font-heading");
-    expect(version?.className).toContain("text-[#faf9f5]");
 
     const time = container.querySelector("time");
     expect(time?.className).toContain("text-sm");

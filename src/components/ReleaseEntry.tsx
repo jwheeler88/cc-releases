@@ -55,7 +55,7 @@ export function ReleaseEntry({ category, content }: ReleaseEntryProps) {
       <div
         className={cn(
           // Base layout and typography
-          "text-[17px] font-body text-[#141413] dark:text-[#faf9f5] leading-relaxed",
+          "text-[17px] font-body font-medium text-[#141413] dark:text-[#faf9f5] leading-relaxed",
           // Inline code styling (theme-aware)
           "[&_code]:bg-[#e8e6dc] dark:[&_code]:bg-[#2a2a28] [&_code]:px-1.5 [&_code]:py-0.5",
           "[&_code]:rounded [&_code]:text-[15px] [&_code]:font-mono",

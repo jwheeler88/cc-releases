@@ -63,11 +63,17 @@ describe('ThemeContext', () => {
       expect(screen.getByText('Test Child')).toBeInTheDocument();
     });
 
-    it('should default to dark theme', () => {
+    it('should default to light theme', () => {
+      // Override matchMedia to simulate no system preference (should fall back to light)
+      Object.defineProperty(window, 'matchMedia', {
+        value: mockMatchMedia(false), // prefers light
+        writable: true,
+      });
+
       const { result } = renderHook(() => useTheme(), {
         wrapper: ThemeProvider
       });
-      expect(result.current.theme).toBe('dark');
+      expect(result.current.theme).toBe('light');
     });
 
     it('should accept custom defaultTheme prop', () => {
@@ -249,7 +255,7 @@ describe('ThemeContext', () => {
       expect(result.current.theme).toBe('light');
     });
 
-    it('should fallback to dark when no localStorage and no matchMedia', () => {
+    it('should fallback to light when no localStorage and no matchMedia', () => {
       Object.defineProperty(window, 'matchMedia', {
         value: undefined,
         writable: true,
@@ -259,7 +265,7 @@ describe('ThemeContext', () => {
         wrapper: ThemeProvider,
       });
 
-      expect(result.current.theme).toBe('dark');
+      expect(result.current.theme).toBe('light');
     });
 
     it('should prioritize localStorage over system preference', () => {
@@ -403,7 +409,7 @@ describe('ThemeContext', () => {
         wrapper: ThemeProvider,
       });
 
-      expect(result.current.theme).toBe('dark'); // Falls back to dark
+      expect(result.current.theme).toBe('light'); // Falls back to light
     });
 
     it('should handle invalid stored theme value', () => {

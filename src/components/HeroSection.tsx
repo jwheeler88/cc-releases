@@ -55,7 +55,7 @@ export function HeroSection({
 
   return (
     <section
-      className="min-h-[40vh] bg-gradient-to-b from-[#141413] via-[#141413] to-[#1a1a18] flex flex-col items-center justify-center px-4 relative overflow-hidden"
+      className="min-h-[40vh] bg-[#e8e6dc] dark:bg-gradient-to-b dark:from-[#141413] dark:via-[#141413] dark:to-[#1a1a18] flex flex-col items-center justify-center px-4 relative overflow-hidden"
       aria-labelledby="hero-title"
     >
       {/* Subtle radial glow behind title */}
@@ -69,9 +69,10 @@ export function HeroSection({
         {/* Title - Space Grotesk display font */}
         <h1
           id="hero-title"
-          className="text-5xl md:text-6xl font-bold text-[#faf9f5] font-display mb-2 tracking-tight"
+          className="text-5xl md:text-6xl font-bold font-display mb-2 tracking-tight"
         >
-          Claude Code
+          <span className="text-[#141413] dark:text-[#faf9f5]">Claude </span>
+          <span className="text-[#d97757]">Code</span>
         </h1>
 
       {/* Tagline */}
@@ -94,7 +95,7 @@ export function HeroSection({
             onChange={(e) => onQueryChange(e.target.value)}
             onKeyDown={handleInputKeyDown}
             placeholder={`Search releases... (${shortcutHint})`}
-            className="bg-transparent flex-1 outline-none text-[#141413] dark:text-[#faf9f5] pl-4 placeholder:text-[#b0aea5]/70"
+            className="bg-transparent flex-1 outline-none text-[#141413] dark:text-[#faf9f5] pl-4 placeholder:text-[#b0aea5]/70 font-medium"
             aria-describedby="search-hint"
             autoComplete="off"
           />
@@ -111,7 +112,7 @@ export function HeroSection({
             key={suggestion}
             type="button"
             onClick={() => handleSuggestionClick(suggestion)}
-            className="bg-[#e8e6dc] dark:bg-[#1a1a19] hover:bg-[#d97757]/20 hover:border-[#d97757]/50 hover:text-[#d97757] border border-transparent rounded-full px-4 py-2 text-sm text-[#b0aea5] transition-all duration-200 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d97757]"
+            className="bg-[#1a1a19] dark:bg-[#2a2a28] text-[#faf9f5] hover:bg-[#d97757] hover:border-[#d97757] hover:text-[#faf9f5] border border-transparent rounded-full px-4 py-2 text-sm transition-all duration-200 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d97757]"
           >
             {suggestion}
           </button>

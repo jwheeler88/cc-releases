@@ -37,17 +37,17 @@ function getStoredTheme(): Theme | null {
 }
 
 // Helper: Detect system color scheme preference
-// Returns: Theme based on OS setting, defaults to 'dark'
+// Returns: Theme based on OS setting, defaults to 'light'
 function getSystemPreference(): Theme {
-  if (typeof window === 'undefined') return 'dark'; // SSR fallback
-  if (!window.matchMedia) return 'dark'; // Browser compatibility fallback
+  if (typeof window === 'undefined') return 'light'; // SSR fallback
+  if (!window.matchMedia) return 'light'; // Browser compatibility fallback
 
   const isDark = window.matchMedia('(prefers-color-scheme: dark)')?.matches ?? false;
   return isDark ? 'dark' : 'light';
 }
 
 // Helper: Get initial theme with priority order
-// Returns: Theme from localStorage > system preference > 'dark' fallback
+// Returns: Theme from localStorage > system preference > 'light' fallback
 function getInitialTheme(): Theme {
   // Priority 1: Explicit user choice from localStorage
   const stored = getStoredTheme();

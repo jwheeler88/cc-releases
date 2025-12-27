@@ -48,12 +48,12 @@ describe("ReleaseEntry", () => {
       <ReleaseEntry category="features" content="Content" />,
     );
 
-    const contentDiv = container.querySelector(".flex-1") as HTMLElement;
+    const wrapper = container.firstChild as HTMLElement;
     // Light theme hover
-    expect(contentDiv.className).toContain("hover:bg-[#e8e6dc]");
+    expect(wrapper.className).toContain("hover:bg-[#f5f4f0]");
     // Dark theme hover
-    expect(contentDiv.className).toContain("dark:hover:bg-[#1a1a19]");
-    expect(contentDiv.className).toContain("transition-colors");
+    expect(wrapper.className).toContain("dark:hover:bg-[#1f1f1e]");
+    expect(wrapper.className).toContain("transition-all");
   });
 
   it("should have correct typography and spacing classes", () => {
@@ -64,15 +64,16 @@ describe("ReleaseEntry", () => {
     const wrapper = container.firstChild as HTMLElement;
     expect(wrapper.className).toContain("pl-4");
     expect(wrapper.className).toContain("py-4");
+    expect(wrapper.className).toContain("rounded-r-lg");
 
-    const contentDiv = container.querySelector(".flex-1") as HTMLElement;
+    const contentDiv = container.querySelector(".font-body") as HTMLElement;
     expect(contentDiv.className).toContain("text-[17px]");
     expect(contentDiv.className).toContain("font-body");
+    expect(contentDiv.className).toContain("font-medium");
     // Theme-aware text colors (light and dark)
     expect(contentDiv.className).toContain("text-[#141413]");
     expect(contentDiv.className).toContain("dark:text-[#faf9f5]");
     expect(contentDiv.className).toContain("leading-relaxed");
-    expect(contentDiv.className).toContain("rounded-r");
   });
 
   it("should gracefully handle invalid category with fallback color", () => {
@@ -116,7 +117,7 @@ describe("ReleaseEntry - Markdown Rendering", () => {
       <ReleaseEntry category="features" content="Text with `code` here" />,
     );
 
-    const contentDiv = container.querySelector(".flex-1") as HTMLElement;
+    const contentDiv = container.querySelector(".font-body") as HTMLElement;
     // Verify Tailwind arbitrary selectors for code styling (theme-aware)
     expect(contentDiv.className).toContain("[&_code]:bg-[#e8e6dc]");
     expect(contentDiv.className).toContain("dark:[&_code]:bg-[#2a2a28]");
@@ -151,7 +152,7 @@ describe("ReleaseEntry - Markdown Rendering", () => {
       />,
     );
 
-    const contentDiv = container.querySelector(".flex-1") as HTMLElement;
+    const contentDiv = container.querySelector(".font-body") as HTMLElement;
     // Verify Tailwind arbitrary selectors for link styling
     expect(contentDiv.className).toContain("[&_a]:text-[#6a9bcc]");
     expect(contentDiv.className).toContain("[&_a:hover]:text-[#8bb4d9]");
@@ -177,7 +178,7 @@ describe("ReleaseEntry - Markdown Rendering", () => {
       <ReleaseEntry category="features" content={content} />,
     );
 
-    const contentDiv = container.querySelector(".flex-1") as HTMLElement;
+    const contentDiv = container.querySelector(".font-body") as HTMLElement;
     // Verify Tailwind arbitrary selectors for list styling
     expect(contentDiv.className).toContain("[&_ul]:list-disc");
     expect(contentDiv.className).toContain("[&_ul]:ml-6");
@@ -323,23 +324,4 @@ describe("ReleaseEntry - CHANGELOG Integration", () => {
   });
 });
 
-describe("ReleaseEntry - CategoryBadge Integration", () => {
-  it("should render CategoryBadge with correct category", () => {
-    render(<ReleaseEntry category="bugfixes" content="Fix bug" />);
-    expect(screen.getByText("Bug Fixes")).toBeInTheDocument();
-  });
-
-  it("should render CategoryBadge for features category", () => {
-    render(<ReleaseEntry category="features" content="Add feature" />);
-    expect(screen.getByText("Features")).toBeInTheDocument();
-  });
-
-  it("should render badge alongside content", () => {
-    render(
-      <ReleaseEntry category="performance" content="Speed up rendering" />,
-    );
-    expect(screen.getByText("Performance")).toBeInTheDocument();
-    // Content should also render
-    expect(screen.getByText(/Speed up rendering/)).toBeInTheDocument();
-  });
-});
+// CategoryBadge Integration tests removed - badge no longer rendered in ReleaseEntry per design spec
