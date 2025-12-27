@@ -1,4 +1,4 @@
-import { Search } from 'lucide-react';
+import { Search, Sparkles } from 'lucide-react';
 import { useRef, useMemo } from 'react';
 import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 
@@ -76,8 +76,11 @@ export function HeroSection({
         </h1>
 
       {/* Tagline */}
-      <p className="text-[#b0aea5] mb-8 font-body italic">
-        Release Notes & Changelog
+      <p className="text-[#9b8bb0] mb-8 font-body flex items-center gap-2">
+        <span>Changelog</span>
+        <span className="text-[#d97757] font-bold">~</span>
+        <span className="italic">"Keep thinking."</span>
+        <Sparkles className="w-4 h-4" aria-hidden="true" />
       </p>
 
       {/* Search input container */}
@@ -112,7 +115,7 @@ export function HeroSection({
             key={suggestion}
             type="button"
             onClick={() => handleSuggestionClick(suggestion)}
-            className="bg-[#1a1a19] dark:bg-[#2a2a28] text-[#faf9f5] hover:bg-[#d97757] hover:border-[#d97757] hover:text-[#faf9f5] border border-transparent rounded-full px-4 py-2 text-sm transition-all duration-200 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d97757]"
+            className="bg-[#2a2a28] dark:bg-[#2a2a28] text-[#faf9f5] hover:bg-[#d97757] hover:border-[#d97757] hover:text-[#faf9f5] border border-transparent rounded-full px-4 py-2 text-sm transition-all duration-200 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d97757]"
           >
             {suggestion}
           </button>

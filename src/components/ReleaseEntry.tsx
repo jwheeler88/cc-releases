@@ -2,6 +2,8 @@ import { marked } from "marked";
 import type { Category } from "@/lib/types";
 import { CATEGORIES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { Copy } from "lucide-react";
+import { toast } from "sonner";
 
 interface ReleaseEntryProps {
   category: Category;
@@ -40,10 +42,19 @@ export function ReleaseEntry({ category, content }: ReleaseEntryProps) {
   const color = categoryData?.color ?? CATEGORIES.features.color;
   const html = renderMarkdown(content);
 
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(content);
+      toast.success("Copied to clipboard");
+    } catch (err) {
+      toast.error("Failed to copy");
+    }
+  };
+
   return (
     <div
       className={cn(
-        "pl-4 py-4 rounded-r-lg transition-all duration-200",
+        "relative group pl-4 py-4 rounded-r-lg transition-all duration-200",
         // Enhanced hover states per spec
         "hover:bg-[#f5f4f0] dark:hover:bg-[#1f1f1e]",
         "hover:pl-5",
@@ -68,6 +79,23 @@ export function ReleaseEntry({ category, content }: ReleaseEntryProps) {
         )}
         dangerouslySetInnerHTML={{ __html: html }}
       />
+
+      {/* Copy button - visible on hover */}
+      <button
+        onClick={handleCopy}
+        className={cn(
+          "absolute bottom-3 right-3 p-2 rounded-md",
+          "bg-[#e8e6dc] dark:bg-[#2a2a28]",
+          "text-[#141413] dark:text-[#faf9f5]",
+          "hover:bg-[#d97757] hover:text-[#faf9f5]",
+          "transition-all duration-200",
+          "opacity-0 group-hover:opacity-100",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d97757]"
+        )}
+        aria-label="Copy to clipboard"
+      >
+        <Copy className="w-4 h-4" aria-hidden="true" />
+      </button>
     </div>
   );
 }

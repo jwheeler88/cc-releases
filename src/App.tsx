@@ -9,6 +9,7 @@ import { EmptySearch } from "@/components/EmptySearch";
 import { ReleaseSection } from "@/components/ReleaseSection";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import type { Release } from "@/lib/types";
+import { Toaster } from "sonner";
 
 function App() {
   const { releases, isLoading, error, retry } = useChangelog();
@@ -27,6 +28,19 @@ function App() {
   // Success state: render all releases
   return (
     <main className="min-h-screen bg-background text-foreground">
+      {/* Toast notifications with brand styling */}
+      <Toaster
+        position="bottom-right"
+        duration={2000}
+        toastOptions={{
+          style: {
+            background: '#faf9f5',
+            color: '#141413',
+            border: '1px solid #d97757',
+          },
+        }}
+      />
+
       {/* ThemeToggle in top-right corner - z-50 ensures it stays above content but below modals (z-50 is standard for fixed UI elements) */}
       <div className="fixed top-2 right-2 sm:top-4 sm:right-4 z-50">
         <ThemeToggle />
