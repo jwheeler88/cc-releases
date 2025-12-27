@@ -60,7 +60,7 @@ function App() {
       />
 
       {/* Page container with padding */}
-      <div className="p-8">
+      <div className="px-4 py-8 md:p-8">
         {/* Centered content wrapper with max-width constraint */}
         <div className="max-w-[720px] mx-auto">
           {/* Conditional: EmptySearch when no results, otherwise release list */}
