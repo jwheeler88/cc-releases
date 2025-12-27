@@ -55,16 +55,24 @@ export function HeroSection({
 
   return (
     <section
-      className="min-h-[40vh] bg-[#141413] flex flex-col items-center justify-center px-4"
+      className="min-h-[40vh] bg-gradient-to-b from-[#141413] via-[#141413] to-[#1a1a18] flex flex-col items-center justify-center px-4 relative overflow-hidden"
       aria-labelledby="hero-title"
     >
-      {/* Title */}
-      <h1
-        id="hero-title"
-        className="text-4xl font-semibold text-[#faf9f5] font-heading mb-2"
-      >
-        Claude Code
-      </h1>
+      {/* Subtle radial glow behind title */}
+      <div
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(217,119,87,0.08)_0%,_transparent_70%)]"
+        aria-hidden="true"
+      />
+
+      {/* Content with relative positioning */}
+      <div className="relative z-10 flex flex-col items-center">
+        {/* Title - Space Grotesk display font */}
+        <h1
+          id="hero-title"
+          className="text-5xl md:text-6xl font-bold text-[#faf9f5] font-display mb-2 tracking-tight"
+        >
+          Claude Code
+        </h1>
 
       {/* Tagline */}
       <p className="text-[#b0aea5] mb-8 font-body">
@@ -96,18 +104,19 @@ export function HeroSection({
         </span>
       </div>
 
-      {/* Suggestion pills */}
+      {/* Suggestion pills - enhanced hover per spec */}
       <div className="flex flex-wrap justify-center gap-2 mt-6" role="group" aria-label="Search suggestions">
         {SUGGESTIONS.map((suggestion) => (
           <button
             key={suggestion}
             type="button"
             onClick={() => handleSuggestionClick(suggestion)}
-            className="bg-[#e8e6dc] dark:bg-[#1a1a19] hover:bg-[#d1cfc5] dark:hover:bg-[#2a2a28] rounded-full px-4 py-4 text-sm text-[#b0aea5] hover:text-[#141413] dark:hover:text-[#faf9f5] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d97757] focus-visible:ring-offset-2"
+            className="bg-[#e8e6dc] dark:bg-[#1a1a19] hover:bg-[#d97757]/20 hover:border-[#d97757]/50 hover:text-[#d97757] border border-transparent rounded-full px-4 py-2 text-sm text-[#b0aea5] transition-all duration-200 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d97757]"
           >
             {suggestion}
           </button>
         ))}
+      </div>
       </div>
     </section>
   );

@@ -4,6 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  --font-display: "Space Grotesk", sans-serif;
   --font-heading: "Poppins", sans-serif;
   --font-body: "Lora", serif;
 

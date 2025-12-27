@@ -55,11 +55,17 @@ export function ReleaseSection({
 
   return (
     <article className="relative flex flex-col md:flex-row gap-4 md:gap-16 py-16">
+      {/* Decorative divider - top of each release (gradient fade) */}
+      <div
+        className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#e8e6dc] to-transparent dark:via-[#2a2a28]"
+        aria-hidden="true"
+      />
+
       {/* Sticky version/date sidebar (desktop only) */}
       <div className="md:sticky top-8 h-fit w-48 shrink-0">
-        {/* Version header */}
-        <h2 className="text-[28px] md:text-[36px] font-heading font-semibold text-[#141413] dark:text-[#faf9f5] mb-2">
-          {version}
+        {/* Version header - prominent accent color */}
+        <h2 className="text-[32px] md:text-[42px] font-heading font-bold mb-2 tracking-tight">
+          <span className="text-[#d97757]">{version}</span>
         </h2>
 
         {/* Release date */}
