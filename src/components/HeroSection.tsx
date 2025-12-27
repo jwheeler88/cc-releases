@@ -76,7 +76,7 @@ export function HeroSection({
         </h1>
 
       {/* Tagline */}
-      <p className="text-[#b0aea5] mb-8 font-body">
+      <p className="text-[#b0aea5] mb-8 font-body italic">
         Release Notes & Changelog
       </p>
 
