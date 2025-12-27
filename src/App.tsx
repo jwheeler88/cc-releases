@@ -27,7 +27,7 @@ function App() {
 
   // Success state: render all releases
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
       {/* Toast notifications with brand styling */}
       <Toaster
         position="bottom-right"
