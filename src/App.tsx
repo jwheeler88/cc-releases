@@ -27,7 +27,7 @@ function App() {
 
   // Success state: render all releases
   return (
-    <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <main className="min-h-screen bg-background text-foreground">
       {/* Toast notifications with brand styling */}
       <Toaster
         position="bottom-right"
@@ -60,7 +60,7 @@ function App() {
       />
 
       {/* Page container with padding */}
-      <div className="px-4 py-8 md:p-8 w-full">
+      <div className="px-4 py-8 md:p-8 w-full max-w-full">
         {/* Centered content wrapper with max-width constraint */}
         <div className="w-full max-w-[720px] mx-auto">
           {/* Conditional: EmptySearch when no results, otherwise release list */}
