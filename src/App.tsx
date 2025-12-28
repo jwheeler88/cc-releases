@@ -7,6 +7,7 @@ import { HeroSection } from "@/components/HeroSection";
 import { SearchStatus } from "@/components/SearchStatus";
 import { EmptySearch } from "@/components/EmptySearch";
 import { ReleaseSection } from "@/components/ReleaseSection";
+import { Attribution } from "@/components/Attribution";
 import type { Release } from "@/lib/types";
 import { Toaster } from "sonner";
 
@@ -39,6 +40,9 @@ function App() {
           },
         }}
       />
+
+      {/* Attribution badge - sticky bottom right */}
+      <Attribution />
 
       {/* HeroSection OUTSIDE centered wrapper - full width */}
       <HeroSection
