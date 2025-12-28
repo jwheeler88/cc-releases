@@ -70,28 +70,21 @@ export function HeroSection({
         aria-hidden="true"
       />
 
-      {/* Abstract floating shapes - Dot grid pattern */}
+      {/* Fixed dot grid with radial opacity fade */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+        style={{
+          backgroundImage: 'radial-gradient(circle, #9b8bb0 1.5px, transparent 1.5px)',
+          backgroundSize: '40px 40px',
+          backgroundPosition: 'center center',
+          maskImage: 'radial-gradient(ellipse at center, transparent 0%, transparent 20%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.6) 100%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at center, transparent 0%, transparent 20%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.6) 100%)'
+        }}
+      />
+
+      {/* Floating organic blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        {/* Evenly spaced dots - top and bottom rows */}
-        {/* Top row */}
-        {[3, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47, 51, 55, 59, 63, 67, 71, 75, 79, 83, 87, 91, 95].map((left) => (
-          <div
-            key={`dot-top-${left}`}
-            className="absolute w-1 h-1 rounded-full bg-[#9b8bb0] opacity-60"
-            style={{ top: '8%', left: `${left}%` }}
-          />
-        ))}
-
-        {/* Bottom row */}
-        {[3, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47, 51, 55, 59, 63, 67, 71, 75, 79, 83, 87, 91, 95].map((left) => (
-          <div
-            key={`dot-bottom-${left}`}
-            className="absolute w-1 h-1 rounded-full bg-[#9b8bb0] opacity-60"
-            style={{ bottom: '8%', left: `${left}%` }}
-          />
-        ))}
-
-        {/* Floating organic blobs */}
 
         {/* Blob 1 - upper left */}
         <div
