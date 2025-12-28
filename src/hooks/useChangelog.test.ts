@@ -14,6 +14,21 @@ _Released 2025-01-10_
 
 - Performance improvement`;
 
+  const mockGitHubCommits = [
+    {
+      commit: {
+        message: 'Release 1.0.53',
+        author: { date: '2025-01-15T10:30:00Z' }
+      }
+    },
+    {
+      commit: {
+        message: 'Release 1.0.52',
+        author: { date: '2025-01-10T08:00:00Z' }
+      }
+    }
+  ];
+
   beforeEach(() => {
     global.fetch = vi.fn() as typeof fetch;
   });
@@ -34,11 +49,16 @@ _Released 2025-01-10_
   });
 
   it("should fetch and parse changelog successfully", async () => {
-    vi.mocked(global.fetch).mockResolvedValueOnce({
-      ok: true,
-      status: 200,
-      text: async () => mockMarkdown,
-    } as Response);
+    vi.mocked(global.fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        text: async () => mockMarkdown,
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockGitHubCommits,
+      } as Response);
 
     const { result } = renderHook(() => useChangelog());
 
@@ -101,12 +121,17 @@ _Released 2025-01-10_
     expect(result.current.isLoading).toBe(false);
     expect(result.current.releases).toEqual([]);
 
-    // Mock successful response for retry
-    vi.mocked(global.fetch).mockResolvedValueOnce({
-      ok: true,
-      status: 200,
-      text: async () => mockMarkdown,
-    } as Response);
+    // Mock successful response for retry (both changelog and commits)
+    vi.mocked(global.fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        text: async () => mockMarkdown,
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockGitHubCommits,
+      } as Response);
 
     // Trigger retry
     act(() => {
@@ -129,11 +154,16 @@ _Released 2025-01-10_
   });
 
   it("should call CHANGELOG_URL with fetch", async () => {
-    vi.mocked(global.fetch).mockResolvedValueOnce({
-      ok: true,
-      status: 200,
-      text: async () => mockMarkdown,
-    } as Response);
+    vi.mocked(global.fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        text: async () => mockMarkdown,
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockGitHubCommits,
+      } as Response);
 
     renderHook(() => useChangelog());
 
@@ -145,32 +175,42 @@ _Released 2025-01-10_
   });
 
   it("should only fetch once on mount", async () => {
-    vi.mocked(global.fetch).mockResolvedValue({
-      ok: true,
-      status: 200,
-      text: async () => mockMarkdown,
-    } as Response);
+    vi.mocked(global.fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        text: async () => mockMarkdown,
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockGitHubCommits,
+      } as Response);
 
     const { rerender } = renderHook(() => useChangelog());
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(global.fetch).toHaveBeenCalledTimes(2); // Once for changelog, once for commits
     });
 
     // Rerender should not trigger another fetch
     rerender();
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(global.fetch).toHaveBeenCalledTimes(2); // Still only 2 calls
     });
   });
 
   it("should handle empty changelog", async () => {
-    vi.mocked(global.fetch).mockResolvedValueOnce({
-      ok: true,
-      status: 200,
-      text: async () => "",
-    } as Response);
+    vi.mocked(global.fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        text: async () => "",
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockGitHubCommits,
+      } as Response);
 
     const { result } = renderHook(() => useChangelog());
 
@@ -198,11 +238,16 @@ _Released 2025-01-10_
 
 - Middle release`;
 
-    vi.mocked(global.fetch).mockResolvedValueOnce({
-      ok: true,
-      status: 200,
-      text: async () => unsortedMarkdown,
-    } as Response);
+    vi.mocked(global.fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        text: async () => unsortedMarkdown,
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockGitHubCommits,
+      } as Response);
 
     const { result } = renderHook(() => useChangelog());
 

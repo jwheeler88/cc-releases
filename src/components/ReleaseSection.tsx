@@ -64,13 +64,13 @@ export function ReleaseSection({
       {/* Sticky version/date sidebar (desktop only) */}
       <div className="md:sticky top-8 h-fit w-48 shrink-0">
         {/* Version header - prominent accent color */}
-        <h2 className="text-[32px] md:text-[42px] font-heading font-bold mb-2 tracking-tight">
+        <h2 className="text-[32px] md:text-[42px] font-heading font-bold mb-0.5 tracking-tight leading-none">
           <span className="text-[#d97757]">{version}</span>
         </h2>
 
         {/* Release date */}
-        <time className="text-sm text-[#b0aea5] font-body" dateTime={isoDate}>
-          {date}
+        <time className="text-sm text-[#9b8bb0] font-body" dateTime={isoDate}>
+          └─ {date}
         </time>
       </div>
 

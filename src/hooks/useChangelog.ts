@@ -31,7 +31,7 @@ export function useChangelog(): UseChangelogResult {
         }
 
         const markdown = await response.text();
-        const parsedReleases = parseChangelog(markdown);
+        const parsedReleases = await parseChangelog(markdown);
 
         // Sort releases in reverse chronological order (newest first)
         // Parse semantic versions (e.g., "1.0.53" -> [1, 0, 53])

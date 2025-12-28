@@ -22,3 +22,5 @@ export const CATEGORIES = {
 } as const;
 
 export const CHANGELOG_URL = 'https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md';
+
+export const GITHUB_COMMITS_API = 'https://api.github.com/repos/anthropics/claude-code/commits';
