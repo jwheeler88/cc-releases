@@ -49,6 +49,16 @@ export function CategoryGroup({
   const { label, color } = CATEGORIES[category];
   const headingId = `category-${category}`;
 
+  // Contextual icons for each category
+  const categoryIcons: Record<Category, string> = {
+    features: '✨',
+    bugfixes: '🐛',
+    performance: '⚡',
+    devx: '🔧',
+  };
+
+  const icon = categoryIcons[category];
+
   return (
     <section
       className={cn(categoryGroupVariants(), className)}
@@ -57,13 +67,12 @@ export function CategoryGroup({
     >
       <h3
         id={headingId}
-        className="text-lg font-semibold font-heading mb-4 pb-2"
+        className="text-2xl font-semibold font-heading mb-4 tracking-wide"
         style={{
           color,
-          borderBottom: `2px solid ${color}`,
         }}
       >
-        • {label}
+        {icon} {label}
       </h3>
       <div className="space-y-4">{children}</div>
     </section>
