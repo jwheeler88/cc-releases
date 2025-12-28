@@ -67,12 +67,21 @@ export function CategoryGroup({
     >
       <h3
         id={headingId}
-        className="text-2xl font-semibold font-heading mb-4 tracking-wide"
+        className="text-2xl font-semibold font-heading tracking-[0.15em] mb-4 inline-flex items-center gap-3"
         style={{
           color,
         }}
       >
-        {icon} {label}
+        <span
+          className="inline-flex items-center justify-center w-10 h-10"
+          style={{
+            backgroundColor: `${color}20`,
+            borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
+          }}
+        >
+          {icon}
+        </span>
+        {label}
       </h3>
       <div className="space-y-4">{children}</div>
     </section>
