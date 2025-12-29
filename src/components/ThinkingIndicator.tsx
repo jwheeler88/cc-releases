@@ -42,25 +42,27 @@ export function ThinkingIndicator() {
       if (fadeTimeoutRef.current) clearTimeout(fadeTimeoutRef.current);
       if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
 
-      // Start fade out after 6 seconds
+      // Start fade out after 5 seconds
       fadeTimeoutRef.current = setTimeout(() => {
         setIsFadingOut(true);
         // Hide completely after fade out animation (300ms)
         hideTimeoutRef.current = setTimeout(() => {
           setIsVisible(false);
         }, 300);
-      }, 6000);
+      }, 5000);
     };
 
-    // Show every 11 seconds (6s visible + 5s gap)
+    // Show every 11 seconds (5s visible + 6s gap)
     const scheduleNext = () => {
-      const delay = 11000; // 11 seconds total (6s visible + 0.3s fade + ~5s gap)
+      const delay = 11000; // 11 seconds total (5s visible + 0.3s fade + ~6s gap)
       scheduleTimeoutRef.current = setTimeout(() => {
         showIndicator();
         scheduleNext();
       }, delay);
     };
 
+    // Show immediately on mount, then schedule repeats
+    showIndicator();
     scheduleNext();
 
     return () => {
@@ -96,7 +98,7 @@ export function ThinkingIndicator() {
         </span>
 
         {/* Message */}
-        <span className="text-sm font-semibold font-mono" style={{ color: '#d97757' }}>
+        <span className="text-sm font-semibold font-mono brightness-sweep" style={{ color: '#d97757' }}>
           {message}
         </span>
       </div>

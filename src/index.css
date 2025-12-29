@@ -274,10 +274,35 @@ body {
   }
 }
 
+@keyframes brightness-sweep {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
 .animate-fade-in {
   animation: fade-in 0.3s ease-out forwards;
 }
 
 .animate-fade-out {
   animation: fade-out 0.3s ease-in forwards;
+}
+
+.brightness-sweep {
+  background: linear-gradient(
+    90deg,
+    #d97757 0%,
+    #d97757 35%,
+    #ff9e7a 50%,
+    #d97757 65%,
+    #d97757 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: brightness-sweep 3.5s linear infinite;
 }
