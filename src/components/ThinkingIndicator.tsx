@@ -24,9 +24,9 @@ export function ThinkingIndicator() {
   const [message, setMessage] = useState('');
   const [speckleFrame, setSpeckleFrame] = useState(0);
 
-  const fadeTimeoutRef = useRef<NodeJS.Timeout>();
-  const hideTimeoutRef = useRef<NodeJS.Timeout>();
-  const scheduleTimeoutRef = useRef<NodeJS.Timeout>();
+  const fadeTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const scheduleTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     const showIndicator = () => {
