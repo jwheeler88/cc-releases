@@ -52,9 +52,9 @@ export function ThinkingIndicator() {
       }, 5000);
     };
 
-    // Show every 11 seconds (5s visible + 6s gap)
+    // Show every 9.3 seconds (5s visible + 4s gap)
     const scheduleNext = () => {
-      const delay = 11000; // 11 seconds total (5s visible + 0.3s fade + ~6s gap)
+      const delay = 9300; // 9.3 seconds total (5s visible + 0.3s fade + 4s gap)
       scheduleTimeoutRef.current = setTimeout(() => {
         showIndicator();
         scheduleNext();
