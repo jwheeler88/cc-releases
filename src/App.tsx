@@ -8,6 +8,7 @@ import { SearchStatus } from "@/components/SearchStatus";
 import { EmptySearch } from "@/components/EmptySearch";
 import { ReleaseSection } from "@/components/ReleaseSection";
 import { Attribution } from "@/components/Attribution";
+import { ThinkingIndicator } from "@/components/ThinkingIndicator";
 import type { Release } from "@/lib/types";
 import { Toaster } from "sonner";
 
@@ -49,6 +50,9 @@ function App() {
         query={query}
         onQueryChange={setQuery}
       />
+
+      {/* Ambient thinking indicator - sticky below hero */}
+      <ThinkingIndicator />
 
       {/* SearchStatus component - full width */}
       <SearchStatus
