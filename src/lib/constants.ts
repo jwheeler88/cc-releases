@@ -7,12 +7,12 @@ export const CATEGORIES = {
   performance: {
     label: 'Performance',
     color: '#6a9bcc',
-    keywords: ['perf', 'fast', 'speed', 'optimize', 'reduce', 'reduced'],
+    keywords: ['perf', 'performance', 'fast', 'faster', 'speed', 'optimize', 'reduce', 'reduced', 'efficient', 'efficiency', 'memory', 'latency'],
   },
   devx: {
     label: 'DevX',
     color: '#9b8bb0',
-    keywords: ['dx', 'developer', 'tooling', 'cli', 'improve', 'improved'],
+    keywords: ['dx', 'developer', 'tooling', 'cli', 'improve', 'improved', 'changed', 'removed', 'moved', 'deprecated'],
   },
   features: {
     label: 'Features',
