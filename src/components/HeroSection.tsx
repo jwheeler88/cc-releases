@@ -177,7 +177,7 @@ export function HeroSection({
 
         {/* Tagline */}
         <p className="text-[#9b8bb0] mb-8 font-body flex items-center gap-2">
-          <span>Changelog</span>
+          <span className="font-bold">Changelog</span>
           <span className="text-[#d97757] font-bold">~</span>
           <span className="italic">"Keep thinking."</span>
           <Sparkles className="w-4 h-4" aria-hidden="true" />

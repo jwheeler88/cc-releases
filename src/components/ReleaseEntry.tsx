@@ -69,7 +69,7 @@ export function ReleaseEntry({ category, content }: ReleaseEntryProps) {
           "text-[17px] font-body font-medium text-[#141413] dark:text-[#faf9f5] leading-relaxed",
           // Inline code styling (theme-aware)
           "[&_code]:bg-[#e8e6dc] dark:[&_code]:bg-[#2a2a28] [&_code]:px-1.5 [&_code]:py-0.5",
-          "[&_code]:rounded [&_code]:text-[15px] [&_code]:font-mono",
+          "[&_code]:rounded [&_code]:text-[14px] [&_code]:font-mono",
           // Link styling
           "[&_a]:text-[#6a9bcc] [&_a:hover]:text-[#8bb4d9] [&_a]:underline",
           // List styling
@@ -90,7 +90,7 @@ export function ReleaseEntry({ category, content }: ReleaseEntryProps) {
           "hover:bg-[#d97757] hover:text-[#faf9f5]",
           "transition-all duration-200",
           "opacity-0 group-hover:opacity-100",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d97757]"
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d97757]",
         )}
         aria-label="Copy to clipboard"
       >
