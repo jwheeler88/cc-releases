@@ -193,7 +193,7 @@ export function HeroSection({
           <label htmlFor="release-search" className="sr-only">
             Search releases
           </label>
-          <div className="bg-white dark:bg-[#1a1a19] rounded-full p-2 flex items-center border border-[#e8e6dc] dark:border-[#2a2a28] focus-within:border-[#d97757] focus-within:ring-2 focus-within:ring-[#d97757]/85 transition-colors">
+          <div className="bg-white dark:bg-[#1a1a19] rounded-full p-2 flex items-center border border-[#e8e6dc] dark:border-[#2a2a28] focus-within:border-[#d97757]/50 focus-within:shadow-[0_0_8px_rgba(217,119,87,0.6),0_0_24px_rgba(217,119,87,0.3)] transition-all duration-200">
             <Search
               className="w-5 h-5 text-[#b0aea5] ml-2 shrink-0"
               aria-hidden="true"
