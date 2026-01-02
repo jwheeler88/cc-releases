@@ -7,6 +7,7 @@
   --font-display: "Space Grotesk", sans-serif;
   --font-heading: "Poppins", sans-serif;
   --font-body: "Lora", serif;
+  --font-mono: "JetBrains Mono", monospace;
 
   --color-background: var(--color-light);
   --color-foreground: var(--color-dark);
@@ -156,9 +157,10 @@ body {
   * {
     @apply border-border outline-ring/50;
     box-sizing: border-box;
-    transition: background-color 200ms ease-in-out,
-                color 200ms ease-in-out,
-                border-color 200ms ease-in-out;
+    transition:
+      background-color 200ms ease-in-out,
+      color 200ms ease-in-out,
+      border-color 200ms ease-in-out;
   }
   html {
     overflow-x: clip;
@@ -194,7 +196,8 @@ body {
 }
 
 @keyframes floatBlob {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0);
   }
   25% {
@@ -229,7 +232,8 @@ body {
     transform: scale(1);
     filter: brightness(1);
   }
-  10.1%, 100% {
+  10.1%,
+  100% {
     opacity: 0;
     transform: scale(1);
     filter: brightness(1);
@@ -237,7 +241,8 @@ body {
 }
 
 @keyframes squiggleUp {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -246,7 +251,8 @@ body {
 }
 
 @keyframes squiggleDown {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
