@@ -29,3 +29,6 @@ dist-ssr
 # BMAD Framework
 _bmad/
 _bmad-output/
+
+# AGENTS.md - Development guidelines for agentic coding agents
+AGENTS.md
