@@ -104,7 +104,7 @@ export function HeroSection({
 
         {/* Blob 1b - bottom right of purple blob */}
         <div
-          className="absolute bg-[#d97757] opacity-18 dark:opacity-12"
+          className="absolute bg-[#d97757] opacity-18 dark:opacity-12 hidden md:block"
           style={{
             top: "23%",
             left: "16%",
@@ -134,7 +134,7 @@ export function HeroSection({
 
         {/* Blob 3 - bottom right */}
         <div
-          className="absolute bg-[#6a9bcc] opacity-20 dark:opacity-15"
+          className="absolute bg-[#6a9bcc] opacity-20 dark:opacity-15 hidden md:block"
           style={{
             bottom: "10%",
             right: "6%",
