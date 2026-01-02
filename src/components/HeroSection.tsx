@@ -69,7 +69,7 @@ export function HeroSection({
       className="min-h-[40vh] bg-[#e8e6dc] dark:bg-gradient-to-b dark:from-[#141413] dark:via-[#141413] dark:to-[#1a1a18] flex flex-col items-center justify-center px-4 relative rounded-3xl mx-4 my-4"
       aria-labelledby="hero-title"
       style={{
-        boxShadow: "0 4px 20px -4px rgba(217, 119, 87, 0.15)",
+        boxShadow: "0 4px 20px -4px rgba(0, 0, 0, 0.1)",
       }}
     >
       {/* ThemeToggle in top-right corner - absolute positioned within hero */}
@@ -175,12 +175,17 @@ export function HeroSection({
           <span className="text-[#d97757]">Code</span>
         </h1>
 
+        {/* Changelog text */}
+        <p className="text-[#9b8bb0] mb-2 font-body font-bold text-xl flex items-center gap-2">
+          Changelog
+          <Sparkles className="w-5 h-5" aria-hidden="true" />
+        </p>
+
         {/* Tagline */}
         <p className="text-[#9b8bb0] mb-8 font-body flex items-center gap-2">
-          <span className="font-bold">Changelog</span>
-          <span className="text-[#d97757] font-bold">~</span>
-          <span className="italic">"Keep thinking."</span>
-          <Sparkles className="w-4 h-4" aria-hidden="true" />
+          <span className="text-[#d97757] font-bold">«</span>
+          <span className="italic">Keep thinking.</span>
+          <span className="text-[#d97757] font-bold">»</span>
         </p>
 
         {/* Search input container */}
@@ -188,7 +193,7 @@ export function HeroSection({
           <label htmlFor="release-search" className="sr-only">
             Search releases
           </label>
-          <div className="bg-white dark:bg-[#1a1a19] rounded-full p-4 flex items-center border border-[#e8e6dc] dark:border-[#2a2a28] focus-within:border-[#d97757] focus-within:ring-2 focus-within:ring-[#d97757]/85 transition-colors">
+          <div className="bg-white dark:bg-[#1a1a19] rounded-full p-2 flex items-center border border-[#e8e6dc] dark:border-[#2a2a28] focus-within:border-[#d97757] focus-within:ring-2 focus-within:ring-[#d97757]/85 transition-colors">
             <Search
               className="w-5 h-5 text-[#b0aea5] ml-2 shrink-0"
               aria-hidden="true"
@@ -222,7 +227,7 @@ export function HeroSection({
               key={suggestion}
               type="button"
               onClick={() => handleSuggestionClick(suggestion)}
-              className="bg-[#2a2a28] dark:bg-[#2a2a28] text-[#faf9f5] hover:bg-[#d97757] hover:border-[#d97757] hover:text-[#faf9f5] border border-transparent rounded-full px-4 py-2 text-sm transition-all duration-200 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d97757]"
+              className="bg-[#4a4a48] dark:bg-[#2a2a28] text-[#faf9f5] hover:bg-[#d97757] hover:border-[#d97757] hover:text-[#faf9f5] border border-transparent rounded-full px-4 py-2 text-sm transition-all duration-200 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d97757]"
             >
               {suggestion}
             </button>
