@@ -9,7 +9,7 @@
   --font-body: "Lora", serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  --color-background: var(--color-light);
+  --color-background: #ffffff;
   --color-foreground: var(--color-dark);
 
   /* Base palette colors as Tailwind utilities */
@@ -69,7 +69,7 @@
 }
 
 .dark {
-  --color-background: var(--color-dark);
+  --color-background: #0a0a09;
   --color-foreground: var(--color-light);
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
