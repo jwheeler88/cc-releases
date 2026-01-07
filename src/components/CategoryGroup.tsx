@@ -83,7 +83,31 @@ export function CategoryGroup({
         </span>
         {label}
       </h3>
-      <div className="space-y-4">{children}</div>
+      {/* Timeline container with vertical dashed line */}
+      <div className="relative">
+        {/* Vertical dashed line - light theme */}
+        <div
+          className="absolute left-0 top-0 bottom-0 w-[2px] z-10 dark:hidden"
+          style={{
+            backgroundImage: 'linear-gradient(to bottom, #e8e6dc 50%, transparent 50%)',
+            backgroundSize: '2px 16px',
+            backgroundRepeat: 'repeat-y',
+          }}
+          aria-hidden="true"
+        />
+        {/* Vertical dashed line - dark theme */}
+        <div
+          className="absolute left-0 top-0 bottom-0 w-[2px] z-10 hidden dark:block"
+          style={{
+            backgroundImage: 'linear-gradient(to bottom, #3a3a38 50%, transparent 50%)',
+            backgroundSize: '2px 16px',
+            backgroundRepeat: 'repeat-y',
+          }}
+          aria-hidden="true"
+        />
+        {/* Entries with spacing */}
+        <div className="space-y-4">{children}</div>
+      </div>
     </section>
   );
 }

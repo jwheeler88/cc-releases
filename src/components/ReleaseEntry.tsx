@@ -54,14 +54,25 @@ export function ReleaseEntry({ category, content }: ReleaseEntryProps) {
   return (
     <div
       className={cn(
-        "relative group pl-4 py-4 rounded-r-lg transition-all duration-200",
+        "relative group pl-8 py-4 rounded-lg transition-all duration-200",
         // Enhanced hover states per spec
         "hover:bg-[#f5f4f0] dark:hover:bg-[#1f1f1e]",
-        "hover:pl-5",
+        "hover:pl-9",
         "hover:shadow-sm dark:hover:shadow-none",
       )}
-      style={{ borderLeft: `2px solid ${color}` }}
     >
+      {/* Colored dot on timeline with outer ring */}
+      <div
+        className="absolute left-[-8px] top-1/2 -translate-y-1/2 w-[18px] h-[18px] rounded-full flex items-center justify-center z-10"
+        style={{ backgroundColor: `${color}30` }}
+        aria-hidden="true"
+      >
+        {/* Inner solid dot */}
+        <div
+          className="w-2 h-2 rounded-full"
+          style={{ backgroundColor: color }}
+        />
+      </div>
       {/* Content - full width with markdown (badge removed per spec) */}
       <div
         className={cn(
