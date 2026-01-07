@@ -66,7 +66,7 @@ export function HeroSection({
 
   return (
     <section
-      className="min-h-[40vh] bg-[#e8e6dc] dark:bg-gradient-to-b dark:from-[#141413] dark:via-[#141413] dark:to-[#1a1a18] flex flex-col items-center justify-center px-4 relative rounded-3xl mx-4 my-4"
+      className="min-h-[40vh] bg-[#F0EEE5] dark:bg-gradient-to-b dark:from-[#141413] dark:via-[#141413] dark:to-[#1a1a18] flex flex-col items-center justify-center px-4 relative rounded-3xl mx-4 my-4"
       aria-labelledby="hero-title"
       style={{
         boxShadow: "0 4px 20px -4px rgba(0, 0, 0, 0.1)",
@@ -98,7 +98,7 @@ export function HeroSection({
             borderRadius: "30% 70% 70% 30% / 30% 30% 70% 70%",
             animation:
               "morphBlob 15s infinite alternate, floatBlob 20s infinite ease-in-out",
-            filter: "blur(2px)",
+            filter: "blur(1px)",
           }}
         />
 
@@ -113,7 +113,7 @@ export function HeroSection({
             borderRadius: "30% 70% 70% 30% / 30% 30% 70% 70%",
             animation:
               "morphBlob 13s infinite alternate, floatBlob 19s infinite ease-in-out 2s",
-            filter: "blur(2px)",
+            filter: "blur(1px)",
           }}
         />
 
@@ -128,7 +128,7 @@ export function HeroSection({
             borderRadius: "30% 70% 70% 30% / 30% 30% 70% 70%",
             animation:
               "morphBlob 14s infinite alternate, floatBlob 18s infinite ease-in-out 3s",
-            filter: "blur(2px)",
+            filter: "blur(1px)",
           }}
         />
 
@@ -143,7 +143,7 @@ export function HeroSection({
             borderRadius: "30% 70% 70% 30% / 30% 30% 70% 70%",
             animation:
               "morphBlob 16s infinite alternate, floatBlob 22s infinite ease-in-out 6s",
-            filter: "blur(2px)",
+            filter: "blur(1px)",
           }}
         />
 
@@ -159,7 +159,7 @@ export function HeroSection({
             borderRadius: "30% 70% 70% 30% / 30% 30% 70% 70%",
             animation:
               "morphBlob 17s infinite alternate, floatBlob 25s infinite ease-in-out 9s",
-            filter: "blur(2px)",
+            filter: "blur(1px)",
           }}
         />
       </div>
